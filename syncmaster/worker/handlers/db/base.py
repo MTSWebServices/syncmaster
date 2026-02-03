@@ -58,7 +58,14 @@ class DBHandler(Handler):
             columns=self._get_columns_filter_expressions(),
             **reader_params,
         )
-        return reader.run()
+        df = reader.run()
+
+        sql_query = self._get_sql_query()
+        if sql_query:
+            df.createOrReplaceTempView("source")
+            df = self.connection.spark.sql(sql_query)
+
+        return df
 
     def write(self, df: DataFrame) -> None:
         if self.transfer_dto.strategy.type == "incremental" and self.hwm and self.hwm.value:
@@ -109,6 +116,12 @@ class DBHandler(Handler):
                 expressions.extend(transformation["filters"])
 
         return self._make_columns_filter_expressions(expressions)
+
+    def _get_sql_query(self) -> str | None:
+        for transformation in self.transfer_dto.transformations:
+            if transformation["type"] == "sql":
+                return transformation["query"]
+        return None
 
     def _get_reading_options(self) -> dict:
         options: dict[str, Any] = {}

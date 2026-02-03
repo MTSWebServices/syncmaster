@@ -58,6 +58,11 @@ class LocalDFFileHandler(FileHandler):
         if columns_filter_expressions:
             df = df.selectExpr(*columns_filter_expressions)
 
+        sql_query = self._get_sql_query()
+        if sql_query:
+            df.createOrReplaceTempView("source")
+            df = self.df_connection.spark.sql(sql_query)
+
         return df
 
     def write(self, df: DataFrame) -> None:

@@ -24,7 +24,9 @@ from tests.test_integration.test_run_transfer.connection_fixtures.filters_fixtur
     dataframe_rows_filter_transformations,
     expected_dataframe_columns_filter,
     expected_dataframe_rows_filter,
+    expected_sql_transformation,
     file_metadata_filter_transformations,
+    sql_transformation,
 )
 from tests.test_integration.test_run_transfer.connection_fixtures.ftp_fixtures import (
     ftp_connection,
@@ -151,6 +153,7 @@ __all__ = [
     "dataframe_rows_filter_transformations",
     "expected_dataframe_columns_filter",
     "expected_dataframe_rows_filter",
+    "expected_sql_transformation",
     "file_format_flavor",
     "file_metadata_filter_transformations",
     "ftp_connection",
@@ -239,6 +242,7 @@ __all__ = [
     "sftp_for_worker",
     "source_file_format",
     "spark",
+    "sql_transformation",
     "target_file_format",
     "update_transfer_strategy",
     "webdav_connection",
