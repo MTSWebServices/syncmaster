@@ -133,3 +133,19 @@ def file_metadata_filter_transformations():
             ],
         },
     ]
+
+
+@pytest.fixture
+def sql_transformation():
+    return [
+        {
+            "type": "sql",
+            "query": "SELECT * FROM source WHERE NUMBER <= 20",
+            "dialect": "spark",
+        },
+    ]
+
+
+@pytest.fixture
+def expected_sql_transformation():
+    return lambda df, source_type: df.filter(df.NUMBER <= 20)

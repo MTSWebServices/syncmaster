@@ -381,3 +381,64 @@ async def test_run_transfer_postgres_to_s3_with_incremental_strategy(
     df_with_increment = reader.run()
     df_with_increment, init_df = cast_dataframe_types(df_with_increment, init_df)
     assert df_with_increment.sort("id").collect() == init_df.sort("id").collect()
+
+
+@pytest.mark.parametrize(
+    [
+        "target_file_format",
+        "file_format_flavor",
+        "strategy",
+        "transformations",
+        "expected_extension",
+    ],
+    [
+        pytest.param(
+            ("parquet", {}),
+            "without_compression",
+            lf("full_strategy"),
+            lf("sql_transformation"),
+            "parquet",
+            id="sql_transformation",
+        ),
+    ],
+    indirect=["target_file_format", "file_format_flavor"],
+)
+async def test_run_transfer_postgres_to_s3_with_sql_transformation(
+    group_owner: MockUser,
+    init_df: DataFrame,
+    client: AsyncClient,
+    s3_file_df_connection: SparkS3,
+    s3_file_connection: S3,
+    prepare_postgres,
+    prepare_s3,
+    postgres_to_s3: Transfer,
+    target_file_format,
+    file_format_flavor: str,
+    strategy,
+    transformations,
+    expected_sql_transformation,
+    expected_extension: str,
+):
+    format_name, format = target_file_format
+    target_path = f"/target/{format_name}/{file_format_flavor}"
+    _, fill_with_data = prepare_postgres
+    fill_with_data(init_df)
+
+    init_df = expected_sql_transformation(init_df, "postgres")
+
+    await run_transfer_and_verify(client, group_owner, postgres_to_s3.id, target_auth="s3")
+
+    file_names = [file.name for file in s3_file_connection.list_dir(target_path) if file.is_file()]
+    verify_file_name_template(file_names, expected_extension)
+
+    reader = FileDFReader(
+        connection=s3_file_df_connection,
+        format=format,
+        source_path=target_path,
+        df_schema=init_df.schema,
+        options={},
+    )
+    df = reader.run()
+
+    df, init_df = cast_dataframe_types(df, init_df)
+    assert df.sort("id").collect() == init_df.sort("id").collect()

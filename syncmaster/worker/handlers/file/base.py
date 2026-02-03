@@ -135,3 +135,9 @@ class FileHandler(Handler):
                 expressions.extend(transformation["filters"])
 
         return self._make_columns_filter_expressions(expressions)
+
+    def _get_sql_query(self) -> str | None:
+        for transformation in self.transfer_dto.transformations:
+            if transformation["type"] == "sql":
+                return transformation["query"]
+        return None
