@@ -38,7 +38,7 @@ async def create_group_member(
     session: AsyncSession,
     access_token_factory,
 ) -> MockUser:
-    role_name = username.split("_")[-1]
+    role_name = username.rsplit("_", maxsplit=1)[-1]
 
     if role_name == "maintainer":
         role = UserTestRoles.Maintainer
