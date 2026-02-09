@@ -3,15 +3,15 @@
 import re
 from typing import Literal
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 ALLOWED_SELECT_QUERY = re.compile(r"^\s*(SELECT|WITH)\b", re.IGNORECASE)
 
 
 class Sql(BaseModel):
     type: Literal["sql"]
-    query: str
-    dialect: Literal["spark"] = "spark"
+    query: str = Field(examples=["SELECT col1, col2 FROM source WHERE col3 <= 20"])
+    dialect: Literal["spark"] = Field(default="spark", description="Static value for now")
 
     @field_validator("query", mode="after")
     @classmethod

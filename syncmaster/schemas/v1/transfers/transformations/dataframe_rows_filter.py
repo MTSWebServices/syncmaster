@@ -19,57 +19,57 @@ class IsNotNullFilter(BaseRowsFilter):
 
 class EqualFilter(BaseRowsFilter):
     type: Literal["equal"]
-    value: str
+    value: str = Field(examples=["123"])
 
 
 class NotEqualFilter(BaseRowsFilter):
     type: Literal["not_equal"]
-    value: str
+    value: str = Field(examples=["123"])
 
 
 class GreaterThanFilter(BaseRowsFilter):
     type: Literal["greater_than"]
-    value: str
+    value: str = Field(examples=["123"])
 
 
 class GreaterOrEqualFilter(BaseRowsFilter):
     type: Literal["greater_or_equal"]
-    value: str
+    value: str = Field(examples=["123"])
 
 
 class LessThanFilter(BaseRowsFilter):
     type: Literal["less_than"]
-    value: str
+    value: str = Field(examples=["123"])
 
 
 class LessOrEqualFilter(BaseRowsFilter):
     type: Literal["less_or_equal"]
-    value: str
+    value: str = Field(examples=["123"])
 
 
 class LikeFilter(BaseRowsFilter):
     type: Literal["like"]
-    value: str
+    value: str = Field(examples=["%.json"])
 
 
 class ILikeFilter(BaseRowsFilter):
     type: Literal["ilike"]
-    value: str
+    value: str = Field(examples=["%.json"])
 
 
 class NotLikeFilter(BaseRowsFilter):
     type: Literal["not_like"]
-    value: str
+    value: str = Field(examples=["%.json"])
 
 
 class NotILikeFilter(BaseRowsFilter):
     type: Literal["not_ilike"]
-    value: str
+    value: str = Field(examples=["%.json"])
 
 
 class RegexpFilter(BaseRowsFilter):
     type: Literal["regexp"]
-    value: str
+    value: str = Field(examples=[r"^\d+\.json$"])
 
 
 RowsFilter = (

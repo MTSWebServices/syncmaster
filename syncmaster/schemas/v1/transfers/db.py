@@ -20,7 +20,11 @@ from syncmaster.schemas.v1.connection_types import (
 
 class DBTransfer(BaseModel):
     TABLE_NAME_PATTERN: ClassVar[str] = r"^[\w\d]+\.[\w\d]+$"
-    table_name: str = Field(description="Table name", json_schema_extra={"pattern": TABLE_NAME_PATTERN})
+    table_name: str = Field(
+        description="Table name",
+        json_schema_extra={"pattern": TABLE_NAME_PATTERN},
+        examples=["myschema.mytable"],
+    )
 
     # make error message more user friendly
     @field_validator("table_name", mode="before")
@@ -60,7 +64,11 @@ class IcebergTransferSourceOrTarget(DBTransfer):
     type: ICEBERG_TYPE
 
     TABLE_NAME_PATTERN: ClassVar[str] = r"^[\w\d]+(\.[\w\d]+)+$"
-    table_name: str = Field(description="Table name", json_schema_extra={"pattern": TABLE_NAME_PATTERN})
+    table_name: str = Field(
+        description="Table name",
+        json_schema_extra={"pattern": TABLE_NAME_PATTERN},
+        examples=["myschema.mytable"],
+    )
 
     # make error message more user friendly
     @field_validator("table_name", mode="before")

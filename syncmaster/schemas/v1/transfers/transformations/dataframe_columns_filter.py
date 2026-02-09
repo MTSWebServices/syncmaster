@@ -15,12 +15,12 @@ class IncludeFilter(BaseColumnsFilter):
 
 class RenameFilter(BaseColumnsFilter):
     type: Literal["rename"]
-    to: str
+    to: str = Field(examples=["new_column_name"])
 
 
 class CastFilter(BaseColumnsFilter):
     type: Literal["cast"]
-    as_type: str
+    as_type: str = Field(examples=["int"])
 
 
 ColumnsFilter = IncludeFilter | RenameFilter | CastFilter
