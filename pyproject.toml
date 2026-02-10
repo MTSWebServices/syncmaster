@@ -106,8 +106,9 @@ test = [
     "dirty-equals~=0.11.0",
 ]
 dev = [
+    "ruff~=0.15.0",
     "mypy~=1.19.1",
-    "prek>=0.2.25,<0.4.0",
+    "prek~=0.3.2",
     "sqlalchemy[mypy]~=2.0.44",
     "types-jwcrypto~=1.5.0",
 ]
