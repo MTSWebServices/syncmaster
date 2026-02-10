@@ -17,30 +17,21 @@ from syncmaster.schemas.v1.file_formats import (
 )
 
 
-class ORCCompression(str, Enum):
+class ORCCompression(str, Enum):  # noqa: UP042
     NONE = "none"
     SNAPPY = "snappy"
     ZLIB = "zlib"
     LZ4 = "lz4"
 
 
-class ParquetCompression(str, Enum):
+class ParquetCompression(str, Enum):  # noqa: UP042
     NONE = "none"
     SNAPPY = "snappy"
     GZIP = "gzip"
     LZ4 = "lz4"
 
 
-class JSONCompression(str, Enum):
-    NONE = "none"
-    BZIP2 = "bzip2"
-    GZIP = "gzip"
-    LZ4 = "lz4"
-    SNAPPY = "snappy"
-    DEFLATE = "deflate"
-
-
-class CSVCompression(str, Enum):
+class JSONCompression(str, Enum):  # noqa: UP042
     NONE = "none"
     BZIP2 = "bzip2"
     GZIP = "gzip"
@@ -49,7 +40,16 @@ class CSVCompression(str, Enum):
     DEFLATE = "deflate"
 
 
-class XMLCompression(str, Enum):
+class CSVCompression(str, Enum):  # noqa: UP042
+    NONE = "none"
+    BZIP2 = "bzip2"
+    GZIP = "gzip"
+    LZ4 = "lz4"
+    SNAPPY = "snappy"
+    DEFLATE = "deflate"
+
+
+class XMLCompression(str, Enum):  # noqa: UP042
     NONE = "none"
     BZIP2 = "bzip2"
     GZIP = "gzip"
