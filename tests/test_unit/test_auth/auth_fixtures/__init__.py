@@ -1,6 +1,7 @@
 from tests.test_unit.test_auth.auth_fixtures.keycloak_fixture import (
     create_session_cookie,
     mock_keycloak_api,
+    mock_keycloak_certs,
     mock_keycloak_introspect_token,
     mock_keycloak_logout,
     mock_keycloak_realm,
@@ -12,6 +13,7 @@ from tests.test_unit.test_auth.auth_fixtures.keycloak_fixture import (
 __all__ = [
     "create_session_cookie",
     "mock_keycloak_api",
+    "mock_keycloak_certs",
     "mock_keycloak_introspect_token",
     "mock_keycloak_logout",
     "mock_keycloak_realm",
