@@ -59,6 +59,7 @@ async def test_keycloak_get_user_authorized(
     create_session_cookie,
     mock_keycloak_well_known,
     mock_keycloak_realm,
+    mock_keycloak_certs,
 ):
     client.cookies.clear()
     session_cookie = create_session_cookie(simple_user)
@@ -86,6 +87,7 @@ async def test_keycloak_get_user_expired_access_token(
     mock_keycloak_well_known,
     mock_keycloak_realm,
     mock_keycloak_token_refresh,
+    mock_keycloak_certs,
 ):
     session_cookie = create_session_cookie(simple_user, expire_in_msec=-100000000)  # expired access token
     client.cookies = {"session": session_cookie}
@@ -113,6 +115,7 @@ async def test_keycloak_get_user_inactive(
     create_session_cookie,
     mock_keycloak_well_known,
     mock_keycloak_realm,
+    mock_keycloak_certs,
 ):
     client.cookies = {"session": create_session_cookie(inactive_user)}
     response = await client.get(f"/v1/users/{simple_user.id}")
@@ -156,6 +159,7 @@ async def test_keycloak_auth_logout(
     mock_keycloak_realm,
     mock_keycloak_token_refresh,
     mock_keycloak_logout,
+    mock_keycloak_certs,
 ):
     client.cookies = {"session": create_session_cookie(simple_user)}
     response = await client.get("/v1/auth/logout")

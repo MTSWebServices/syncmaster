@@ -1,4 +1,6 @@
+import base64
 import json
+import secrets
 import time
 from base64 import b64encode
 
@@ -29,7 +31,6 @@ def rsa_keys():
         encryption_algorithm=NoEncryption(),
     )
     public_key = private_key.public_key()
-
     return {
         "private_key": private_key,
         "private_pem": private_pem,
@@ -209,3 +210,37 @@ def mock_keycloak_introspect_token(settings, mock_keycloak_api):
         )
 
     return _mock_keycloak_introspect_token
+
+
+@pytest.fixture
+def mock_keycloak_certs(settings, rsa_keys, mock_keycloak_api):
+    keycloak_settings = settings.auth.model_dump()["keycloak"]
+    api_url = keycloak_settings["api_url"]
+    realm_name = keycloak_settings["client_id"]
+    realm_url = f"{api_url}/realms/{realm_name}"
+    certs_url = f"{realm_url}/protocol/openid-connect/certs"
+
+    def encode_number_base64(n: int):
+        return base64.b64encode(n.to_bytes((n.bit_length() + 7) // 8, byteorder="big")).decode("utf-8")
+
+    # return public key in Keycloak JWK format
+    # https://github.com/marcospereirampj/python-keycloak/pull/704/changes
+    public_key = rsa_keys["public_key"]
+    payload = {
+        "keys": [
+            {
+                "kid": secrets.token_hex(16),
+                "kty": "RSA",
+                "alg": "RS256",
+                "use": "sig",
+                "n": encode_number_base64(public_key.public_numbers().n),
+                "e": encode_number_base64(public_key.public_numbers().e),
+            },
+        ]
+    }
+
+    mock_keycloak_api.get(certs_url).respond(
+        json=payload,
+        status_code=200,
+        content_type="application/json",
+    )
