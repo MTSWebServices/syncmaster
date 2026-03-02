@@ -21,7 +21,7 @@ class Sql(BaseModel):
             msg = "Query must be a SELECT statement"
             raise ValueError(msg)
 
-        if not QUERY_CONTAINS_FROM_SOURCE.match(value):
+        if not QUERY_CONTAINS_FROM_SOURCE.search(value):
             msg = "Query must contain `FROM source` clause"
             raise ValueError(msg)
 
