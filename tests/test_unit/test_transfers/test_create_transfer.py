@@ -1422,6 +1422,8 @@ async def test_developer_plus_can_create_transfer_with_sql_transformation(
     "query",
     [
         "SELECT col1, col2 FROM source WHERE col1 > 100;",
+        "SELECT col1, col2\nFROM source\nWHERE col1 > 100;",
+        "SELECT col1, col2\r\nFROM source\r\nWHERE col1 > 100;",
         "select COL1 from SOURCE",
         "   SELECT   col1   FROM   source  ",
         " WITH some AS (SELECT col1 FROM source) SELECT * FROM some;",
