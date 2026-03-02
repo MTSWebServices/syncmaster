@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import logging
 from abc import abstractmethod
 from typing import TYPE_CHECKING, Any, ClassVar
 
@@ -18,6 +19,9 @@ if TYPE_CHECKING:
     from pyspark.sql.dataframe import DataFrame
 
     from syncmaster.dto.transfers import DBTransferDTO
+
+
+logger = logging.getLogger(__name__)
 
 
 class DBHandler(Handler):
@@ -62,6 +66,7 @@ class DBHandler(Handler):
 
         sql_query = self._get_sql_query()
         if sql_query:
+            logger.info("Applying SQL transformation:\n%s", sql_query)
             df.createOrReplaceTempView("source")
             df = self.connection.spark.sql(sql_query)
 

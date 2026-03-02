@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -16,6 +17,9 @@ from syncmaster.worker.handlers.file.base import FileHandler
 if TYPE_CHECKING:
     from onetl.connection import SparkLocalFS
     from pyspark.sql import DataFrame
+
+
+logger = logging.getLogger(__name__)
 
 
 class LocalDFFileHandler(FileHandler):
@@ -60,6 +64,7 @@ class LocalDFFileHandler(FileHandler):
 
         sql_query = self._get_sql_query()
         if sql_query:
+            logger.info("Applying SQL transformation:\n%s", sql_query)
             df.createOrReplaceTempView("source")
             df = self.df_connection.spark.sql(sql_query)
 

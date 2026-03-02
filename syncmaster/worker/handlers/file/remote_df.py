@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -12,6 +13,9 @@ from syncmaster.worker.handlers.file.base import FileHandler
 
 if TYPE_CHECKING:
     from pyspark.sql import DataFrame
+
+
+logger = logging.getLogger(__name__)
 
 
 class RemoteDFFileHandler(FileHandler):
@@ -37,6 +41,7 @@ class RemoteDFFileHandler(FileHandler):
 
         sql_query = self._get_sql_query()
         if sql_query:
+            logger.info("Applying SQL transformation:\n%s", sql_query)
             df.createOrReplaceTempView("source")
             df = self.df_connection.spark.sql(sql_query)
 
