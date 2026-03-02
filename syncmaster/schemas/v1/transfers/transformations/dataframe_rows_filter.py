@@ -10,65 +10,65 @@ class BaseRowsFilter(BaseModel):
 
 
 class IsNullFilter(BaseRowsFilter):
-    type: Literal["is_null"]
+    type: Literal["is_null"] = "is_null"
 
 
 class IsNotNullFilter(BaseRowsFilter):
-    type: Literal["is_not_null"]
+    type: Literal["is_not_null"] = "is_not_null"
 
 
 class EqualFilter(BaseRowsFilter):
-    type: Literal["equal"]
+    type: Literal["equal"] = "equal"
     value: str = Field(examples=["123"])
 
 
 class NotEqualFilter(BaseRowsFilter):
-    type: Literal["not_equal"]
+    type: Literal["not_equal"] = "not_equal"
     value: str = Field(examples=["123"])
 
 
 class GreaterThanFilter(BaseRowsFilter):
-    type: Literal["greater_than"]
+    type: Literal["greater_than"] = "greater_than"
     value: str = Field(examples=["123"])
 
 
 class GreaterOrEqualFilter(BaseRowsFilter):
-    type: Literal["greater_or_equal"]
+    type: Literal["greater_or_equal"] = "greater_or_equal"
     value: str = Field(examples=["123"])
 
 
 class LessThanFilter(BaseRowsFilter):
-    type: Literal["less_than"]
+    type: Literal["less_than"] = "less_than"
     value: str = Field(examples=["123"])
 
 
 class LessOrEqualFilter(BaseRowsFilter):
-    type: Literal["less_or_equal"]
+    type: Literal["less_or_equal"] = "less_or_equal"
     value: str = Field(examples=["123"])
 
 
 class LikeFilter(BaseRowsFilter):
-    type: Literal["like"]
+    type: Literal["like"] = "like"
     value: str = Field(examples=["%.json"])
 
 
 class ILikeFilter(BaseRowsFilter):
-    type: Literal["ilike"]
+    type: Literal["ilike"] = "ilike"
     value: str = Field(examples=["%.json"])
 
 
 class NotLikeFilter(BaseRowsFilter):
-    type: Literal["not_like"]
+    type: Literal["not_like"] = "not_like"
     value: str = Field(examples=["%.json"])
 
 
 class NotILikeFilter(BaseRowsFilter):
-    type: Literal["not_ilike"]
+    type: Literal["not_ilike"] = "not_ilike"
     value: str = Field(examples=["%.json"])
 
 
 class RegexpFilter(BaseRowsFilter):
-    type: Literal["regexp"]
+    type: Literal["regexp"] = "regexp"
     value: str = Field(examples=[r"^\d+\.json$"])
 
 

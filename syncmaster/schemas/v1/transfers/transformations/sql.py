@@ -10,7 +10,7 @@ QUERY_CONTAINS_FROM_SOURCE = re.compile(r"\bFROM\s+source\b", re.IGNORECASE)
 
 
 class Sql(BaseModel):
-    type: Literal["sql"]
+    type: Literal["sql"] = "sql"
     query: str = Field(examples=["SELECT col1, col2 FROM source WHERE col3 <= 20"])
     dialect: Literal["spark"] = Field(default="spark", description="Static value for now")
 

@@ -8,7 +8,7 @@ from syncmaster.schemas.v1.auth.mixins import SecretDumpMixin
 
 
 class ReadIcebergRESTCatalogBearerAuthSchema(SecretDumpMixin):
-    type: Literal["iceberg_rest_bearer"] = Field(description="Auth type")
+    type: Literal["iceberg_rest_bearer"] = Field(default="iceberg_rest_bearer", description="Auth type")
 
 
 class CreateIcebergRESTCatalogBearerAuthSchema(ReadIcebergRESTCatalogBearerAuthSchema):

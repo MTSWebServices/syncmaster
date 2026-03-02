@@ -8,7 +8,10 @@ from syncmaster.schemas.v1.auth.mixins import SecretDumpMixin
 
 
 class ReadIcebergRESTCatalogOAuth2ClientCredentialsS3BasicAuthSchema(SecretDumpMixin):
-    type: Literal["iceberg_rest_oauth2_client_credentials_s3_basic"] = Field(description="Auth type")
+    type: Literal["iceberg_rest_oauth2_client_credentials_s3_basic"] = Field(
+        default="iceberg_rest_oauth2_client_credentials_s3_basic",
+        description="Auth type",
+    )
     rest_catalog_oauth2_client_id: str
     rest_catalog_oauth2_scopes: list[str] = Field(default_factory=list)
     rest_catalog_oauth2_resource: str | None = None

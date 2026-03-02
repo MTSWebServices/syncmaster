@@ -8,7 +8,7 @@ from syncmaster.schemas.v1.auth.mixins import SecretDumpMixin
 
 
 class ReadS3AuthSchema(SecretDumpMixin):
-    type: Literal["s3"] = Field(description="Auth type")
+    type: Literal["s3"] = Field(default="s3", description="Auth type")
     access_key: str
 
 

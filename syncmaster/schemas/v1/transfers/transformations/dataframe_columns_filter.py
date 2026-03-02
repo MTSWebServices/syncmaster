@@ -10,16 +10,16 @@ class BaseColumnsFilter(BaseModel):
 
 
 class IncludeFilter(BaseColumnsFilter):
-    type: Literal["include"]
+    type: Literal["include"] = "include"
 
 
 class RenameFilter(BaseColumnsFilter):
-    type: Literal["rename"]
+    type: Literal["rename"] = "rename"
     to: str = Field(examples=["new_column_name"])
 
 
 class CastFilter(BaseColumnsFilter):
-    type: Literal["cast"]
+    type: Literal["cast"] = "cast"
     as_type: str = Field(examples=["int"])
 
 
@@ -27,5 +27,5 @@ ColumnsFilter = IncludeFilter | RenameFilter | CastFilter
 
 
 class DataframeColumnsFilter(BaseModel):
-    type: Literal["dataframe_columns_filter"]
+    type: Literal["dataframe_columns_filter"] = "dataframe_columns_filter"
     filters: list[Annotated[ColumnsFilter, Field(discriminator="type")]] = Field(default_factory=list)

@@ -8,7 +8,7 @@ from syncmaster.schemas.v1.auth.mixins import SecretDumpMixin
 
 
 class ReadSambaAuthSchema(SecretDumpMixin):
-    type: Literal["samba"] = Field(description="Auth type")
+    type: Literal["samba"] = Field(default="samba", description="Auth type")
     user: str
     auth_type: Literal["NTLMv1", "NTLMv2"] = "NTLMv2"
 

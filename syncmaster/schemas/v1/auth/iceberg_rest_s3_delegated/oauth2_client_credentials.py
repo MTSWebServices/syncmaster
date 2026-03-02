@@ -9,7 +9,10 @@ from syncmaster.schemas.v1.types import URL
 
 
 class ReadIcebergRESTCatalogOAuth2ClientCredentialsAuthSchema(SecretDumpMixin):
-    type: Literal["iceberg_rest_oauth2_client_credentials"] = Field(description="Auth type")
+    type: Literal["iceberg_rest_oauth2_client_credentials"] = Field(
+        default="iceberg_rest_oauth2_client_credentials",
+        description="Auth type",
+    )
     rest_catalog_oauth2_client_id: str
     rest_catalog_oauth2_scopes: list[str] = Field(default_factory=list)
     rest_catalog_oauth2_resource: str | None = None

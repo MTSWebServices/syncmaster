@@ -8,7 +8,10 @@ from syncmaster.schemas.v1.auth.mixins import SecretDumpMixin
 
 
 class ReadIcebergRESTCatalogBearerS3BasicAuthSchema(SecretDumpMixin):
-    type: Literal["iceberg_rest_bearer_s3_basic"] = Field(description="Auth type")
+    type: Literal["iceberg_rest_bearer_s3_basic"] = Field(
+        default="iceberg_rest_bearer_s3_basic",
+        description="Auth type",
+    )
     s3_access_key: str
 
 

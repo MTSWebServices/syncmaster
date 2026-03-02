@@ -8,7 +8,7 @@ from pydantic import BaseModel, ByteSize, Field, field_validator
 
 
 class NameGlobFilter(BaseModel):
-    type: Literal["name_glob"]
+    type: Literal["name_glob"] = "name_glob"
     value: str = Field(examples=["*.json"])
 
     @field_validator("value", mode="before")
@@ -22,7 +22,7 @@ class NameGlobFilter(BaseModel):
 
 
 class NameRegexpFilter(BaseModel):
-    type: Literal["name_regexp"]
+    type: Literal["name_regexp"] = "name_regexp"
     value: str = Field(examples=[r"^\d+\.json$"])
 
     @field_validator("value", mode="before")
@@ -38,12 +38,12 @@ class NameRegexpFilter(BaseModel):
 
 
 class FileSizeMinFilter(BaseModel):
-    type: Literal["file_size_min"]
+    type: Literal["file_size_min"] = "file_size_min"
     value: ByteSize = Field(examples=[1024 * 1024])
 
 
 class FileSizeMaxFilter(BaseModel):
-    type: Literal["file_size_max"]
+    type: Literal["file_size_max"] = "file_size_max"
     value: ByteSize = Field(examples=[1024 * 1024 * 1024])
 
 
@@ -51,5 +51,5 @@ MetadataFilter = NameGlobFilter | NameRegexpFilter | FileSizeMinFilter | FileSiz
 
 
 class FileMetadataFilter(BaseModel):
-    type: Literal["file_metadata_filter"]
+    type: Literal["file_metadata_filter"] = "file_metadata_filter"
     filters: list[Annotated[MetadataFilter, Field(discriminator="type")]] = Field(default_factory=list)

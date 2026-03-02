@@ -58,7 +58,7 @@ class XMLCompression(str, Enum):  # noqa: UP042
 
 
 class CSV(BaseModel):
-    type: CSV_FORMAT
+    type: CSV_FORMAT = "csv"
     delimiter: str = ","
     encoding: str = "utf-8"
     quote: str = '"'
@@ -69,37 +69,37 @@ class CSV(BaseModel):
 
 
 class JSONLine(BaseModel):
-    type: JSONLINE_FORMAT
+    type: JSONLINE_FORMAT = "jsonline"
     encoding: str = "utf-8"
     line_sep: str = "\n"
     compression: JSONCompression = JSONCompression.GZIP
 
 
 class JSON(BaseModel):
-    type: JSON_FORMAT
+    type: JSON_FORMAT = "json"
     encoding: str = "utf-8"
     line_sep: str = "\n"
     compression: JSONCompression = JSONCompression.GZIP
 
 
 class Excel(BaseModel):
-    type: EXCEL_FORMAT
+    type: EXCEL_FORMAT = "excel"
     include_header: bool = False
     start_cell: str | None = None
 
 
 class XML(BaseModel):
-    type: XML_FORMAT
+    type: XML_FORMAT = "xml"
     root_tag: str
     row_tag: str
     compression: XMLCompression = XMLCompression.GZIP
 
 
 class ORC(BaseModel):
-    type: ORC_FORMAT
+    type: ORC_FORMAT = "orc"
     compression: ORCCompression = ORCCompression.ZLIB
 
 
 class Parquet(BaseModel):
-    type: PARQUET_FORMAT
+    type: PARQUET_FORMAT = "parquet"
     compression: ParquetCompression = ParquetCompression.SNAPPY

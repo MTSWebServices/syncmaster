@@ -24,7 +24,7 @@ from syncmaster.schemas.v1.types import URL
 
 
 class IcebergRESTCatalogS3DirectConnectionDataSchema(BaseModel):
-    type: Literal["iceberg_rest_s3_direct"]
+    type: Literal["iceberg_rest_s3_direct"] = "iceberg_rest_s3_direct"
     rest_catalog_url: URL
     s3_warehouse_path: str
     s3_host: str
@@ -37,7 +37,7 @@ class IcebergRESTCatalogS3DirectConnectionDataSchema(BaseModel):
 
 
 class IcebergRESTCatalogS3DelegatedConnectionDataSchema(BaseModel):
-    type: Literal["iceberg_rest_s3_delegated"]
+    type: Literal["iceberg_rest_s3_delegated"] = "iceberg_rest_s3_delegated"
     rest_catalog_url: URL
     s3_warehouse_name: str | None = None
     s3_access_delegation: Literal["vended-credentials", "remote-signing"] = "vended-credentials"

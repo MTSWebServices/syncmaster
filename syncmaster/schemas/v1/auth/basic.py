@@ -8,7 +8,7 @@ from syncmaster.schemas.v1.auth.mixins import SecretDumpMixin
 
 
 class ReadBasicAuthSchema(SecretDumpMixin):
-    type: Literal["basic"] = Field(description="Auth type")
+    type: Literal["basic"] = Field(default="basic", description="Auth type")
     user: str
 
 
