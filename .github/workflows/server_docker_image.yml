@@ -19,7 +19,7 @@ jobs:
   release:
     name: Build & push server image to Dockerhub
     runs-on: ubuntu-latest
-    if: github.repository == 'MobileTeleSystems/syncmaster'  # prevent running on forks
+    if: github.repository == 'MTSWebServices/syncmaster'  # prevent running on forks
 
     permissions:
       contents: read

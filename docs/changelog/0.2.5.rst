@@ -4,7 +4,7 @@
 Features
 --------
 
-- Implement Keycloak login page on frontend. (`#128 <https://github.com/MobileTeleSystems/syncmaster-ui/pull/128>`_)
+- Implement Keycloak login page on frontend. (`#128 <https://github.com/MTSWebServices/syncmaster-ui/pull/128>`_)
 - Implement ``GET /v1/auth/logout`` endpoint for ``KeycloakAuthProvider``. (:issue:`275`)
 
 Improvements

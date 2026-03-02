@@ -168,7 +168,7 @@ htmlhelp_basename = "syncmaster-doc"
 
 
 # which is the equivalent to:
-issues_uri = "https://github.com/MobileTeleSystems/syncmaster/issues/{issue}"
-issues_pr_uri = "https://github.com/MobileTeleSystems/syncmaster/pulls/{pr}"
-issues_commit_uri = "https://github.com/MobileTeleSystems/syncmaster/commit/{commit}"
+issues_uri = "https://github.com/MTSWebServices/syncmaster/issues/{issue}"
+issues_pr_uri = "https://github.com/MTSWebServices/syncmaster/pulls/{pr}"
+issues_commit_uri = "https://github.com/MTSWebServices/syncmaster/commit/{commit}"
 issues_user_uri = "https://github.com/{user}"

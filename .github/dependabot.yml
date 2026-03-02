@@ -20,7 +20,7 @@ updates:
     labels:
       - type:dependency
     ignore:
-      # https://github.com/MobileTeleSystems/onetl/pull/297
+      # https://github.com/MTSWebServices/onetl/pull/297
       - dependency-name: pyspark
         update-types: [version-update:semver-major]
       - dependency-name: pytest-asyncio

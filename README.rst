@@ -4,7 +4,7 @@
 
 .. |Logo| image:: docs/_static/logo_wide_red_text.svg
     :alt: Data.SyncMaster logo
-    :target: https://github.com/MobileTeleSystems/data-syncmaster
+    :target: https://github.com/MTSWebServices/data-syncmaster
 
 |Repo Status| |Docker image| |PyPI| |PyPI License| |PyPI Python Version| |Documentation|
 |Build Status| |Coverage| |pre-commit.ci|
@@ -16,18 +16,18 @@
 .. |PyPI| image:: https://img.shields.io/pypi/v/data-syncmaster
     :target: https://pypi.org/project/data-syncmaster/
 .. |PyPI License| image:: https://img.shields.io/pypi/l/data-syncmaster.svg
-    :target: https://github.com/MobileTeleSystems/syncmaster/blob/develop/LICENSE.txt
+    :target: https://github.com/MTSWebServices/syncmaster/blob/develop/LICENSE.txt
 .. |PyPI Python Version| image:: https://img.shields.io/pypi/pyversions/data-syncmaster.svg
     :target: https://badge.fury.io/py/data-syncmaster
 .. |Documentation| image:: https://readthedocs.org/projects/syncmaster/badge/?version=stable
     :target: https://syncmaster.readthedocs.io
-.. |Build Status| image:: https://github.com/MobileTeleSystems/syncmaster/workflows/Run%20All%20Tests/badge.svg
-    :target: https://github.com/MobileTeleSystems/syncmaster/actions
+.. |Build Status| image:: https://github.com/MTSWebServices/syncmaster/workflows/Run%20All%20Tests/badge.svg
+    :target: https://github.com/MTSWebServices/syncmaster/actions
 .. |Coverage| image:: https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/
     MTSOnGithub/03e73a82ecc4709934540ce8201cc3b4/raw/syncmaster_badge.json
-    :target: https://github.com/MobileTeleSystems/syncmaster/actions
-.. |pre-commit.ci| image:: https://results.pre-commit.ci/badge/github/MobileTeleSystems/syncmaster/develop.svg
-    :target: https://results.pre-commit.ci/latest/github/MobileTeleSystems/syncmaster/develop
+    :target: https://github.com/MTSWebServices/syncmaster/actions
+.. |pre-commit.ci| image:: https://results.pre-commit.ci/badge/github/MTSWebServices/syncmaster/develop.svg
+    :target: https://results.pre-commit.ci/latest/github/MTSWebServices/syncmaster/develop
 
 What is Data.SyncMaster?
 ------------------------

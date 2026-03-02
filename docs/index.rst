@@ -40,7 +40,7 @@
 
 .. image:: _static/logo_wide.svg
     :alt: Data.SyncMaster logo
-    :target: https://github.com/MobileTeleSystems/data-syncmaster
+    :target: https://github.com/MTSWebServices/data-syncmaster
     :class: readme-wide-logo
 
 .. include:: ../README.rst

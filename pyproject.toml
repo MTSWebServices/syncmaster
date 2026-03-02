@@ -56,11 +56,11 @@ exclude = ["docs", "tests"]
 "*" = ["py.typed", "*.yml",  "*.ini", "VERSION"]
 
 [project.urls]  # Optional
-"Homepage" = "https://github.com/MobileTeleSystems/syncmaster"
+"Homepage" = "https://github.com/MTSWebServices/syncmaster"
 "Documentation" = "https://syncmaster.readthedocs.io/"
-"Source" = "https://github.com/MobileTeleSystems/syncmaster"
-"CI/CD" = "https://github.com/MobileTeleSystems/syncmaster/actions"
-"Tracker" = "https://github.com/MobileTeleSystems/syncmaster/issues"
+"Source" = "https://github.com/MTSWebServices/syncmaster"
+"CI/CD" = "https://github.com/MTSWebServices/syncmaster/actions"
+"Tracker" = "https://github.com/MTSWebServices/syncmaster/issues"
 
 
 [project.optional-dependencies]
