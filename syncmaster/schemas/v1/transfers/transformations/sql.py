@@ -5,7 +5,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-ALLOWED_SELECT_QUERY = re.compile(r"^\s*(SELECT|WITH)\b", re.IGNORECASE)
+ALLOWED_QUERY_TYPE = re.compile(r"^\s*(SELECT|WITH)\b", re.IGNORECASE)
+QUERY_CONTAINS_FROM_SOURCE = re.compile(r"\bFROM\s+source\b", re.IGNORECASE)
 
 
 class Sql(BaseModel):
@@ -16,8 +17,12 @@ class Sql(BaseModel):
     @field_validator("query", mode="after")
     @classmethod
     def _validate_query(cls, value: str) -> str:
-        if not ALLOWED_SELECT_QUERY.match(value):
-            msg = f"Query must be a SELECT statement, got '{value}'"
+        if not ALLOWED_QUERY_TYPE.match(value):
+            msg = "Query must be a SELECT statement"
+            raise ValueError(msg)
+
+        if not QUERY_CONTAINS_FROM_SOURCE.match(value):
+            msg = "Query must contain `FROM source` clause"
             raise ValueError(msg)
 
         return value

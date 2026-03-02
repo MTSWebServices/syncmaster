@@ -832,7 +832,7 @@ async def test_superuser_can_create_transfer(
                                 "sql",
                                 "query",
                             ],
-                            "message": "Value error, Query must be a SELECT statement, got 'INSERT INTO table1 VALUES (1, 2)'",
+                            "message": "Value error, Query must be a SELECT statement",
                             "code": "value_error",
                             "context": {},
                             "input": "INSERT INTO table1 VALUES (1, 2)",
@@ -841,6 +841,39 @@ async def test_superuser_can_create_transfer(
                 },
             },
             id="sql_non_select_query",
+        ),
+        pytest.param(
+            {
+                "transformations": [
+                    {
+                        "type": "sql",
+                        "query": "SELECT * FROM table1",
+                        "dialect": "spark",
+                    },
+                ],
+            },
+            {
+                "error": {
+                    "code": "invalid_request",
+                    "message": "Invalid request",
+                    "details": [
+                        {
+                            "location": [
+                                "body",
+                                "transformations",
+                                0,
+                                "sql",
+                                "query",
+                            ],
+                            "message": "Value error, Query must contain `FROM source` clause",
+                            "code": "value_error",
+                            "context": {},
+                            "input": "SELECT * FROM table1",
+                        },
+                    ],
+                },
+            },
+            id="sql_invalid_select_query",
         ),
         pytest.param(
             {
