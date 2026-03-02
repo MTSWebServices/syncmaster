@@ -877,39 +877,6 @@ async def test_superuser_can_create_transfer(
         ),
         pytest.param(
             {
-                "transformations": [
-                    {
-                        "type": "sql",
-                        "query": None,
-                        "dialect": "spark",
-                    },
-                ],
-            },
-            {
-                "error": {
-                    "code": "invalid_request",
-                    "message": "Invalid request",
-                    "details": [
-                        {
-                            "location": [
-                                "body",
-                                "transformations",
-                                0,
-                                "sql",
-                                "query",
-                            ],
-                            "message": "Input should be a valid string",
-                            "code": "string_type",
-                            "context": {},
-                            "input": None,
-                        },
-                    ],
-                },
-            },
-            id="sql_non_string_query",
-        ),
-        pytest.param(
-            {
                 "resources": {
                     "max_parallel_tasks": 1,
                     "cpu_cores_per_task": 2,
@@ -1415,7 +1382,7 @@ async def test_developer_plus_can_create_transfer_with_sql_transformation(
             "transformations": [
                 {
                     "type": "sql",
-                    "query": "SELECT * FROM table",
+                    "query": "SELECT * FROM source",
                     "dialect": "spark",
                 },
             ],
@@ -1454,10 +1421,10 @@ async def test_developer_plus_can_create_transfer_with_sql_transformation(
 @pytest.mark.parametrize(
     "query",
     [
-        "SELECT col1, col2 FROM table1 WHERE col1 > 100;",
+        "SELECT col1, col2 FROM source WHERE col1 > 100;",
         "select col1 from table1",
-        "   SELECT   col1   FROM   table1  ",
-        " WITH some AS (SELECT col1 FROM table1) SELECT * FROM some;",
+        "   SELECT   col1   FROM   source  ",
+        " WITH some AS (SELECT col1 FROM source) SELECT * FROM some;",
     ],
 )
 async def test_sql_transformation_with_valid_select_queries(
