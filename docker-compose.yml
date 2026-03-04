@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready
+      test: [CMD-SHELL, 'pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}']
       start_period: 5s
       interval: 30s
       timeout: 5s
@@ -82,7 +82,7 @@ services:
       dockerfile: docker/Dockerfile.worker
       context: .
       target: prod
-    command: worker --events --queues 123-test_queue  # Queue.slug
+    command: worker --events --queues 123-test_queue  # Queue.slug must be created in advance!
     volumes:
       - ./config.docker.yml:/app/config.yml
     depends_on:
