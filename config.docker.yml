@@ -42,12 +42,11 @@ server:
 
   cors:
     enabled: true
-
-  allow_origins: [http://localhost:3000]
-  allow_credentials: true
-  allow_methods: ['*']
-  allow_headers: ['*']
-  expose_headers: [X-Request-ID, Location, Access-Control-Allow-Credentials]
+    allow_origins: [http://localhost:3000]
+    allow_credentials: true
+    allow_methods: ['*']
+    allow_headers: ['*']
+    expose_headers: [X-Request-ID, Location, Access-Control-Allow-Credentials]
 
 
 scheduler:
