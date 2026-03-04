@@ -60,8 +60,9 @@ services:
       PROMETHEUS_MULTIPROC_DIR: /tmp/prometheus-metrics
     # tmpfs dir is cleaned up each container restart
     tmpfs:
-      - ./config.docker.yml:/app/config.yml
       - /tmp/prometheus-metrics:mode=1777
+    volumes:
+      - ./config.docker.yml:/app/config.yml
     depends_on:
       db:
         condition: service_healthy
