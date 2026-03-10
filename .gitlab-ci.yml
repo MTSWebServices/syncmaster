@@ -13,7 +13,7 @@ sbom-creation:
       when: always
   image:
     name: ${DEFAULT_IMAGE}:develop
-    entrypoint: [""]
+    entrypoint: ['']
   script:
     - uv pip install cyclonedx-bom
     - uv export --all-extras --no-dev --no-group test --no-group docs --link-mode=copy --format requirements.txt | cyclonedx-py requirements - > sbom.cyclonedx.json
@@ -29,7 +29,7 @@ security-scan:
   trigger:
     include:
       - project: $SECURITY_PIPELINE_PROJECT
-        file: 'security_pipeline.yaml'
+        file: security_pipeline.yaml
         ref: $SECURITY_PIPELINE_REF
     forward:
       pipeline_variables: true
@@ -37,5 +37,5 @@ security-scan:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       when: always
-    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: $CI_PIPELINE_SOURCE == "web"
       when: always
