@@ -38,7 +38,7 @@ For example, for slug `123-test_queue` this should be `-Q 123-test_queue`.
 
   ### `docker-compose.yml`
 
-  ```default
+  ```
   services:
     db:
       image: postgres:17
@@ -175,7 +175,7 @@ For example, for slug `123-test_queue` this should be `-Q 123-test_queue`.
 
   ### `.env.docker`
 
-  ```default
+  ```
   TZ=UTC
   ENV=LOCAL
 

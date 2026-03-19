@@ -54,7 +54,7 @@ This is done by adding a specific filter to logging handler:
 
 ### `logging.yml`
 
-```default
+```
 # development usage only
 version: 1
 disable_existing_loggers: false

@@ -24,7 +24,7 @@ providing users the ability to create, update, delete entitities.
 
   ### `docker-compose.yml`
 
-  ```default
+  ```
   services:
     db:
       image: postgres:17
@@ -161,7 +161,7 @@ providing users the ability to create, update, delete entitities.
 
   ### `.env.docker`
 
-  ```default
+  ```
   TZ=UTC
   ENV=LOCAL
 

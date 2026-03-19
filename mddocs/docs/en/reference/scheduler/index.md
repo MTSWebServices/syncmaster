@@ -26,7 +26,7 @@ Implemented using [APScheduler](https://github.com/agronholm/apscheduler).
 
   ### `docker-compose.yml`
 
-  ```default
+  ```
   services:
     db:
       image: postgres:17
@@ -163,7 +163,7 @@ Implemented using [APScheduler](https://github.com/agronholm/apscheduler).
 
   ### `.env.docker`
 
-  ```default
+  ```
   TZ=UTC
   ENV=LOCAL
 

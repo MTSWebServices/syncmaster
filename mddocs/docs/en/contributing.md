@@ -152,11 +152,10 @@ make test-check-fixtures
 
 #### Integration tests
 
-#### WARNING
+!!! warning
+    To run HDFS and Hive tests locally you should add the following line to your `/etc/hosts` (file path depends on OS):
 
-To run HDFS and Hive tests locally you should add the following line to your `/etc/hosts` (file path depends on OS):
-
-```default
+```
 # HDFS/Hive server returns container hostname as connection address, causing error in DNS resolution
 127.0.0.1 test-hive
 ```

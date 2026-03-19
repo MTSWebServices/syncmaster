@@ -24,7 +24,7 @@ Implemented using [FastAPI](https://fastapi.tiangolo.com/).
 
 ### `docker-compose.yml`
 
-  ```default
+  ```
   services:
     db:
       image: postgres:17
@@ -161,7 +161,7 @@ Implemented using [FastAPI](https://fastapi.tiangolo.com/).
 
 ### `.env.docker`
 
-  ```default
+  ```
   TZ=UTC
   ENV=LOCAL
 

@@ -10,9 +10,8 @@ After a database is started, it is required to run migration script.
 For empty database, it creates all the required tables and indexes.
 For non-empty database, it will perform database structure upgrade, using [Alembic](https://alembic.sqlalchemy.org/).
 
-### WARNING
-
-Other containers (server, scheduler, worker) should be stopped while running migrations, to prevent interference.
+!!! warning
+    Other containers (server, scheduler, worker) should be stopped while running migrations, to prevent interference.
 
 ## Requirements
 
@@ -42,7 +41,7 @@ Other containers (server, scheduler, worker) should be stopped while running mig
 
 ### `docker-compose.yml`
 
-  ```default
+  ```
   services:
     db:
       image: postgres:17
@@ -179,7 +178,7 @@ Other containers (server, scheduler, worker) should be stopped while running mig
 
 ### `.env.docker`
 
-  ```default
+  ```
   TZ=UTC
   ENV=LOCAL
 

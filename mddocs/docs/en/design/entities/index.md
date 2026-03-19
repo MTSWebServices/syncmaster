@@ -70,100 +70,6 @@ Transfers cannot be created without queue. If there are no workers bound to a qu
 
 ## Entity Diagram
 
-```plantuml
-
-    @startuml
-    title Entity Diagram
-
-    left to right direction
-
-    entity User {
-        * id
-        ----
-        username
-        is_active
-        is_superuser
-        created_at
-        updated_at
-    }
-
-    entity Group {
-        * id
-        ----
-        name
-        description
-        owner_id
-        created_at
-        updated_at
-    }
-
-    entity Connection {
-        * id
-        ----
-        group_id
-        type
-        name
-        description
-        data
-        created_at
-        updated_at
-    }
-
-    entity Queue {
-        * id
-        ----
-        name
-        slug
-        group_id
-        description
-        created_at
-        updated_at
-    }
-
-    entity Transfer {
-        * id
-        ----
-        group_id
-        name
-        source_connection_id
-        target_connection_id
-        strategy_params
-        target_params
-        transformations
-        resources
-        is_scheduled
-        schedule
-        queue_id
-        created_at
-        updated_at
-    }
-
-    entity Run {
-        * id
-        ----
-        transfer_id
-        started_at
-        ended_at
-        status
-        type
-        log_url
-        transfer_dump
-        created_at
-        updated_at
-    }
-
-    Run ||--o{ Transfer
-    Transfer ||--o{ Queue
-    Transfer ||--o{ Connection
-    Transfer ||--o{ Group
-    Connection ||--o{ Group
-    Queue ||--o{ Group
-    Group }o--o{ User
-    Group "owner_id" ||--o{ User
-
-    @enduml
-```
-
 ```mermaid
 ---
 title: Entity Diagram
@@ -171,72 +77,72 @@ title: Entity Diagram
 erDiagram
     direction LR
     User {
-        id        
-        username
-        is_active
-        is_superuser
-        created_at
-        updated_at
+        number id        
+        string username
+        string is_active
+        string is_superuser
+        string created_at
+        string updated_at
     }
 
     Group {
-        id        
-        name
-        description
-        owner_id
-        created_at
-        updated_at
+        number id        
+        string name
+        string description
+        number owner_id
+        string created_at
+        string updated_at
     }
 
     Connection {
-        id        
-        group_id
-        type
-        name
-        description
-        data
-        created_at
-        updated_at
+        number id        
+        number group_id
+        string type
+        string name
+        string description
+        string data
+        string created_at
+        string updated_at
     }
 
     Queue {
-        id        
-        name
-        slug
-        description
-        created_at
-        updated_at
+        number id        
+        string name
+        string slug
+        string description
+        string created_at
+        string updated_at
     }
     
 
     Transfer {
-        id        
-        group_id
-        name
-        source_connection_id
-        target_connection_id
-        strategy_params
-        target_params
-        transformations
-        resources
-        is_scheduled
-        schedule
-        queue_id
-        created_at
-        updated_at
+        number id        
+        number group_id
+        string name
+        number source_connection_id
+        number target_connection_id
+        string strategy_params
+        string target_params
+        string transformations
+        string resources
+        string is_scheduled
+        string schedule
+        number queue_id
+        string created_at
+        string updated_at
     }
 
     Run {
-        id
-        transfer_id
-        started_at
-        ended_at
-        status
-        type
-        log_url
-        transfer_dump
-        created_at
-        updated_at
+        number id
+        number transfer_id
+        string started_at
+        string ended_at
+        string status
+        string type
+        string log_url
+        string transfer_dump
+        string created_at
+        string updated_at
     }
     
     Run ||--o{ Transfer: contains   

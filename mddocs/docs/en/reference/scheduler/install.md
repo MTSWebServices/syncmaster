@@ -21,7 +21,7 @@
 
 ### `docker-compose.yml`
 
-```default
+```
 services:
   db:
     image: postgres:17
@@ -158,7 +158,7 @@ volumes:
 
 ### `.env.docker`
 
-```default
+```
 TZ=UTC
 ENV=LOCAL
 

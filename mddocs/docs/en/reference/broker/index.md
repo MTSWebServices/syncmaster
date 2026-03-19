@@ -31,7 +31,7 @@ But the only broker we tested is [RabbitMQ](https://www.rabbitmq.com/).
 
 ### `docker-compose.yml`
 
-  ```default
+  ```
   services:
     db:
       image: postgres:17
@@ -168,7 +168,7 @@ But the only broker we tested is [RabbitMQ](https://www.rabbitmq.com/).
 
 ### `.env.docker`
 
-  ```default
+  ```
   TZ=UTC
   ENV=LOCAL
 
