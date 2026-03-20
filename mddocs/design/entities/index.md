@@ -17,7 +17,7 @@ Groups are independent from each other, and have globally unique name.
 ![image](group_info.png)
 
 Group can be created by any user, which automatically get `OWNER` role.
-This role allows adding members to the group, and assign them speficic roles:
+This role allows adding members to the group, and assign them specific roles:
 
 ![image](group_add_member.png)
 
@@ -77,7 +77,7 @@ title: Entity Diagram
 erDiagram
     direction LR
     User {
-        number id        
+        number id
         string username
         string is_active
         string is_superuser
@@ -86,7 +86,7 @@ erDiagram
     }
 
     Group {
-        number id        
+        number id
         string name
         string description
         number owner_id
@@ -95,7 +95,7 @@ erDiagram
     }
 
     Connection {
-        number id        
+        number id
         number group_id
         string type
         string name
@@ -106,17 +106,17 @@ erDiagram
     }
 
     Queue {
-        number id        
+        number id
         string name
         string slug
         string description
         string created_at
         string updated_at
     }
-    
+
 
     Transfer {
-        number id        
+        number id
         number group_id
         string name
         number source_connection_id
@@ -144,9 +144,9 @@ erDiagram
         string created_at
         string updated_at
     }
-    
-    Run ||--o{ Transfer: contains   
-   
+
+    Run ||--o{ Transfer: contains
+
     Transfer ||--o{ Queue: contains
     Transfer ||--o{ Connection: contains
     Transfer ||--o{ Group: contains

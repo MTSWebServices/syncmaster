@@ -248,7 +248,7 @@ For non-empty database, it will perform database structure upgrade, using [Alemb
 - Create virtual environment
 
   ```console
-  $ python -m venv /some/.venv  
+  $ python -m venv /some/.venv
   $ source /some/.venv/activate
   ...
   ```

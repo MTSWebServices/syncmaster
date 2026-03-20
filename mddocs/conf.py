@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2025-present MTS PJSC
+# SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2023-2024 MTS PJSC
 # SPDX-License-Identifier: Apache-2.0
 # Configuration file for the Sphinx documentation builder.

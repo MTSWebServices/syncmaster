@@ -5,7 +5,7 @@
 
 ## What is Data.SyncMaster?
 
-Data.SyncMaster is as low-code ETL tool for transfering data between databases and file systems.
+Data.SyncMaster is as low-code ETL tool for transferring data between databases and file systems.
 List of currently supported connections:
 
 * Apache Hive
@@ -28,7 +28,7 @@ Based on [onETL](https://onetl.readthedocs.io/) and [Apache Spark](https://spark
 
 ## Goals
 
-* Make transfering data between databases and file systems as simple as possible
+* Make transferring data between databases and file systems as simple as possible
 * Provide a lot of builtin connectors to transfer data in heterogeneous environment
 * RBAC and multitenancy support
 
