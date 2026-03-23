@@ -41,28 +41,6 @@ version = ver.base_version
 # The full version, including alpha/beta/rc tags.
 release = ver.public
 
-# -- General configuration ---------------------------------------------------
-
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    "numpydoc",
-    "sphinx_copybutton",
-    "sphinx.ext.doctest",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.intersphinx",
-    "sphinxcontrib.autodoc_pydantic",
-    "sphinxcontrib.towncrier",  # provides `towncrier-draft-entries` directive
-    "sphinx_issues",
-    "sphinx_design",  # provides `dropdown` directive
-    "sphinxcontrib.plantuml",
-    "sphinx_favicon",
-    "sphinxarg.ext",
-    "sphinx_last_updated_by_git",
-]
-
 swagger = [
     {
         "name": "SyncMaster REST API",
