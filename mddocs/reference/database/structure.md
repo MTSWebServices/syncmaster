@@ -11,13 +11,13 @@ erDiagram
     User_Group {
         bigint user_id PK
         bigint group_id PK
-        varchar(255) role_id 
+        varchar(255) role_id
     }
 
     User {
-        bigint id  PK       
-        varchar(256) username  
-        varchar(256) email  null 
+        bigint id  PK
+        varchar(256) username
+        varchar(256) email  null
         varchar(256) first_name null
         varchar(256) last_name null
         varchar(256) middle_name null
@@ -29,10 +29,10 @@ erDiagram
 
     Group {
         bigint id  PK
-        varchar(256) name 
+        varchar(256) name
         varchar(512) description
         bigint owner_id
-        timestamptz created_at 
+        timestamptz created_at
         timestamptz updated_at
         tsquery search_vector
     }
@@ -49,12 +49,12 @@ erDiagram
 
     Connection {
         bigint id PK
-        bigint group_id 
+        bigint group_id
         varchar(32) type
-        varchar(123) name 
+        varchar(123) name
         varchar(512) description
         json data
-        timestamptz created_at 
+        timestamptz created_at
         timestamptz updated_at
         tsquery search_vector
     }
