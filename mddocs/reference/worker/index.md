@@ -38,9 +38,9 @@ For example, for slug `123-test_queue` this should be `-Q 123-test_queue`.
 
 ### `docker-compose.yml`
 
- --8<--
- docker-compose.yml:77:96
- --8<--
+--8<--
+docker-compose.yml:77:96
+--8<--
 
 ### `config.yml`
 
@@ -102,7 +102,8 @@ config.yml:1:10,57:67
 
   Refer to the [Celery](https://docs.celeryq.dev/en/stable/) documentation for more advanced start options.
 
-  > **`--max-tasks-per-child=1` flag is important!**
+  !!! note
+      `--max-tasks-per-child=1` flag is important!
 
 ## See also
 

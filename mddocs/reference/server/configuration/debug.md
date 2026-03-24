@@ -52,15 +52,15 @@ This is done by `request_id` middleware, which is enabled by default and can con
 
 This is done by adding a specific filter to logging settings:
 
-### `logging.yml`
+### `config.yml`
 
 ```yaml
-        logging:
-            filters:
-                correlation_id:
-                    class: asgi_correlation_id.CorrelationIdFilter
-                    uuid_length: 32
-                    default_value: '-'
+logging:
+    filters:
+        correlation_id:
+            class: asgi_correlation_id.CorrelationIdFilter
+            uuid_length: 32
+            default_value: '-'
 ```
 
 Resulting logs look like:

@@ -24,17 +24,17 @@ Implemented using [APScheduler](https://github.com/agronholm/apscheduler).
 
   Options can be set via  `config.yml` file.
 
-  ### `docker-compose.yml`
+### `docker-compose.yml`
 
-  --8<--
-  docker-compose.yml:98:116
-  --8<--
+--8<--
+docker-compose.yml:98:116
+--8<--
 
-  ### `config.yml`
+### `config.yml`
 
-  --8<--
-  config.yml:1:10,57:58
-  --8<--
+--8<--
+config.yml:1:10,57:58
+--8<--
 
 ### Without docker
 

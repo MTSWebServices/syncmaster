@@ -1,32 +1,67 @@
-# Altering Spark session settings { #worker-create-spark-session }
+# Configuring Spark session { #worker-create-spark-session }
 
 SyncMaster Worker creates [SparkSession](https://spark.apache.org/docs/latest/sql-getting-started.html#starting-point-sparksession) for each Run.
-By default, SparkSession is created with `master=local`, all required .jar packages for specific DB/FileSystem types, and limiter by transfer resources.
 
-It is possible to alter SparkSession config by providing custom function:
+By default, SparkSession is created with ``spark.master: local``, including all required .jar packages for specific DB/FileSystem types, and limiter by transfer resources.
 
-```bash
-SYNCMASTER__WORKER__CREATE_SPARK_SESSION_FUNCTION=my_worker.spark.create_custom_spark_session
+## Custom Spark session configuration
+
+It is possible to alter default [Spark Session configuration](https://spark.apache.org/docs/latest/configuration.html)_ worker settings:
+
+```yaml
+worker:
+        spark_session_default_config:
+            spark.master: local
+            spark.driver.host: 127.0.0.1
+            spark.driver.bindAddress: 0.0.0.0
+            spark.sql.pyspark.jvmStacktrace.enabled: true
+            spark.ui.enabled: false
+```
+
+For example, to use SyncMaster on Spark-on-K8s, you can use worker image for Spark executor containers:
+
+```yaml
+    worker:
+        spark_session_default_config:
+            spark.master: k8s://https://kubernetes.default.svc
+            spark.driver.host: service-for-spark-driver
+            spark.driver.bindAddress: 0.0.0.0
+            spark.driver.port: 10000
+            spark.blockManager.port: 10001
+            spark.kubernetes.authenticate.driver.serviceAccountName: spark
+            spark.sql.pyspark.jvmStacktrace.enabled: true
+            spark.kubernetes.container.image: mtsrus/syncmaster-worker:{TAG}
+```
+
+!!! note
+    Currently Spark-on-K8s and Spark-on-Yarn do not support interaction FTP, FTPS, SFTP, Samba and WebDAV.
+    This requires  ``sparm.master: local``.
+
+## Custom Spark session factory
+
+It is also possible to use custom function which returns ``SparkSession`` object:
+
+```yaml
+    worker:
+        create_spark_session_function: my_worker.spark.create_custom_spark_session
 ```
 
 Here is a function example:
 
 ```python
-:caption: my_workers/spark.py
+    from syncmaster.db.models import Run
+    from syncmaster.dto.connections import ConnectionDTO
+    from syncmaster.worker.settings import WorkerSettings
+    from pyspark.sql import SparkSession
 
-from syncmaster.db.models import Run
-from syncmaster.dto.connections import ConnectionDTO
-from pyspark.sql import SparkSession
-
-def create_custom_spark_session(
-    run: Run,
-    source: ConnectionDTO,
-    target: ConnectionDTO,
-) -> SparkSession:
-    # any custom code returning SparkSession object
-    return SparkSession.builde.config(...).getOrCreate()
+    def create_custom_spark_session(
+        run: Run,
+        source: ConnectionDTO,
+        target: ConnectionDTO,
+        settings: WorkerSettings,
+    ) -> SparkSession:
+        # any custom code returning SparkSession object
+        return SparkSession.builde.config(...).getOrCreate()
 ```
 
-Module with custom function should be placed in the same Docker image or Python virtual environment used by SyncMaster worker.
-
-> **For now, SyncMaster haven't been tested with `master=k8s` and `master=yarn`, so there can be some caveats.**
+Module with custom function should be placed into the same Docker image or Python virtual environment used by SyncMaster worker.

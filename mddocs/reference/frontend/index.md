@@ -24,9 +24,9 @@ providing users the ability to create, update, delete entities.
 
 ### `docker-compose.yml`
 
- --8<--
- docker-compose.yml:118:130
- --8<--
+--8<--
+docker-compose.yml:118:130
+--8<--
 
 ### `config.yml`
 

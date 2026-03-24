@@ -24,9 +24,9 @@ Implemented using [FastAPI](https://fastapi.tiangolo.com/).
 
 ### `docker-compose.yml`
 
- --8<--
- docker-compose.yml:48:75
- --8<--
+--8<--
+docker-compose.yml:48:75
+--8<--
 
 ### `config.yml`
 
