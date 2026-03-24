@@ -10,27 +10,27 @@ It is possible to alter default [Spark Session configuration](https://spark.apac
 
 ```yaml
 worker:
-        spark_session_default_config:
-            spark.master: local
-            spark.driver.host: 127.0.0.1
-            spark.driver.bindAddress: 0.0.0.0
-            spark.sql.pyspark.jvmStacktrace.enabled: true
-            spark.ui.enabled: false
+    spark_session_default_config:
+        spark.master: local
+        spark.driver.host: 127.0.0.1
+        spark.driver.bindAddress: 0.0.0.0
+        spark.sql.pyspark.jvmStacktrace.enabled: true
+        spark.ui.enabled: false
 ```
 
 For example, to use SyncMaster on Spark-on-K8s, you can use worker image for Spark executor containers:
 
 ```yaml
-    worker:
-        spark_session_default_config:
-            spark.master: k8s://https://kubernetes.default.svc
-            spark.driver.host: service-for-spark-driver
-            spark.driver.bindAddress: 0.0.0.0
-            spark.driver.port: 10000
-            spark.blockManager.port: 10001
-            spark.kubernetes.authenticate.driver.serviceAccountName: spark
-            spark.sql.pyspark.jvmStacktrace.enabled: true
-            spark.kubernetes.container.image: mtsrus/syncmaster-worker:{TAG}
+worker:
+    spark_session_default_config:
+        spark.master: k8s://https://kubernetes.default.svc
+        spark.driver.host: service-for-spark-driver
+        spark.driver.bindAddress: 0.0.0.0
+        spark.driver.port: 10000
+        spark.blockManager.port: 10001
+        spark.kubernetes.authenticate.driver.serviceAccountName: spark
+        spark.sql.pyspark.jvmStacktrace.enabled: true
+        spark.kubernetes.container.image: mtsrus/syncmaster-worker:{TAG}
 ```
 
 !!! note
@@ -42,26 +42,26 @@ For example, to use SyncMaster on Spark-on-K8s, you can use worker image for Spa
 It is also possible to use custom function which returns ``SparkSession`` object:
 
 ```yaml
-    worker:
-        create_spark_session_function: my_worker.spark.create_custom_spark_session
+worker:
+    create_spark_session_function: my_worker.spark.create_custom_spark_session
 ```
 
 Here is a function example:
 
-```python
-    from syncmaster.db.models import Run
-    from syncmaster.dto.connections import ConnectionDTO
-    from syncmaster.worker.settings import WorkerSettings
-    from pyspark.sql import SparkSession
+```python title="my_workers/spark.py"
+from syncmaster.db.models import Run
+from syncmaster.dto.connections import ConnectionDTO
+from syncmaster.worker.settings import WorkerSettings
+from pyspark.sql import SparkSession
 
-    def create_custom_spark_session(
-        run: Run,
-        source: ConnectionDTO,
-        target: ConnectionDTO,
-        settings: WorkerSettings,
-    ) -> SparkSession:
-        # any custom code returning SparkSession object
-        return SparkSession.builde.config(...).getOrCreate()
+def create_custom_spark_session(
+    run: Run,
+    source: ConnectionDTO,
+    target: ConnectionDTO,
+    settings: WorkerSettings,
+) -> SparkSession:
+# any custom code returning SparkSession object
+return SparkSession.builde.config(...).getOrCreate()
 ```
 
 Module with custom function should be placed into the same Docker image or Python virtual environment used by SyncMaster worker.
