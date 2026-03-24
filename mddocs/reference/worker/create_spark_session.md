@@ -8,7 +8,7 @@ By default, SparkSession is created with ``spark.master: local``, including all 
 
 It is possible to alter default [Spark Session configuration](https://spark.apache.org/docs/latest/configuration.html)_ worker settings:
 
-```yaml
+```yaml title="config.yaml"
 worker:
     spark_session_default_config:
         spark.master: local
@@ -20,7 +20,7 @@ worker:
 
 For example, to use SyncMaster on Spark-on-K8s, you can use worker image for Spark executor containers:
 
-```yaml
+```yaml title="config.yaml"
 worker:
     spark_session_default_config:
         spark.master: k8s://https://kubernetes.default.svc
@@ -41,7 +41,7 @@ worker:
 
 It is also possible to use custom function which returns ``SparkSession`` object:
 
-```yaml
+```yaml title="config.yaml"
 worker:
     create_spark_session_function: my_worker.spark.create_custom_spark_session
 ```
@@ -60,8 +60,8 @@ def create_custom_spark_session(
     target: ConnectionDTO,
     settings: WorkerSettings,
 ) -> SparkSession:
-# any custom code returning SparkSession object
-return SparkSession.builde.config(...).getOrCreate()
+    # any custom code returning SparkSession object
+      return SparkSession.builde.config(...).getOrCreate()
 ```
 
 Module with custom function should be placed into the same Docker image or Python virtual environment used by SyncMaster worker.

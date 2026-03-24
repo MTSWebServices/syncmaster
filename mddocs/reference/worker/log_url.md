@@ -6,7 +6,7 @@ This log URL might point to an Elastic instance or another logging tool such as 
 The log URL is generated based on a template configured in the configuration.
 The configuration parameter is:
 
-```yaml
+```yaml title="config.yaml"
     worker:
         log_url_template: https://grafana.example.com?correlation_id={{ correlation_id }}&run_id={{ run.id }}
 ```

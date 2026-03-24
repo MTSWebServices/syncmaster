@@ -9,17 +9,17 @@ There are two ways to manage users:
 
   Usernames can be passed via config file:
 
-  ```yaml title="config.yml"
-      superusers:
-        - user1
-        - user2
-  ```
+```yaml title="config.yml"
+superusers:
+  - user1
+  - user2
+```
 
   Or via environment variable:
 
-  ```bash
-    export 'SYNCMASTER__SUPERUSERS=["user1", "user2"]'
-  ```
+```bash
+export 'SYNCMASTER__SUPERUSERS=["user1", "user2"]'
+```
 
 - manual via CLI:
 <!-- TODO: fix docstring extraction -->

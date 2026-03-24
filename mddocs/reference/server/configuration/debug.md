@@ -54,7 +54,7 @@ This is done by adding a specific filter to logging settings:
 
 ### `config.yml`
 
-```yaml
+```yaml title="config.yml"
 logging:
     filters:
         correlation_id:
