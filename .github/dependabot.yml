@@ -25,6 +25,8 @@ updates:
         update-types: [version-update:semver-major]
       - dependency-name: pytest-asyncio
         update-types: [version-update:semver-major]
+      - dependency-name: starlette
+        update-types: [version-update:semver-major]
     # https://til.simonwillison.net/github/dependabot-python-setup
     groups:
       python-packages:
