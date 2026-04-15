@@ -38,6 +38,7 @@ class ClickhouseHandler(DBHandler):
             host=self.connection_dto.host,
             port=self.connection_dto.port,
             user=self.connection_dto.user,
+            database=self.connection_dto.database_name,
             password=self.connection_dto.password,
             extra=self.connection_dto.additional_params,
             spark=spark,

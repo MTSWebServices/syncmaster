@@ -35,6 +35,7 @@ class MySQLHandler(DBHandler):
             user=self.connection_dto.user,
             password=self.connection_dto.password,
             database=self.connection_dto.database_name,
+            extra=self.connection_dto.additional_params,
             spark=spark,
         ).check()
 
