@@ -18,10 +18,22 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_index(op.f("ix_celery_taskmeta_date_done"), "celery_taskmeta", ["date_done"], unique=False)
-    op.create_index(op.f("ix_celery_tasksetmeta_date_done"), "celery_tasksetmeta", ["date_done"], unique=False)
+    op.create_index(
+        op.f("ix_celery_taskmeta_date_done"),
+        "celery_taskmeta",
+        ["date_done"],
+        unique=False,
+        if_not_exists=True,
+    )
+    op.create_index(
+        op.f("ix_celery_tasksetmeta_date_done"),
+        "celery_tasksetmeta",
+        ["date_done"],
+        unique=False,
+        if_not_exists=True,
+    )
 
 
 def downgrade() -> None:
-    op.drop_index(op.f("ix_celery_tasksetmeta_date_done"), table_name="celery_tasksetmeta")
-    op.drop_index(op.f("ix_celery_taskmeta_date_done"), table_name="celery_taskmeta")
+    op.drop_index(op.f("ix_celery_tasksetmeta_date_done"), table_name="celery_tasksetmeta", if_exists=True)
+    op.drop_index(op.f("ix_celery_taskmeta_date_done"), table_name="celery_taskmeta", if_exists=True)
