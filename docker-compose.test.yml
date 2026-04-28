@@ -19,7 +19,8 @@ services:
       retries: 3
 
   rabbitmq:
-    image: rabbitmq:4
+    # not using 4.3 until https://github.com/celery/kombu/issues/2237
+    image: rabbitmq:4.2
     restart: unless-stopped
     ports:
       - 5672:5672
