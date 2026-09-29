@@ -74,6 +74,8 @@ plugins:
             show_if_no_docstring: true
   - towncrier
   - git-revision-date-localized
+  - privacy:
+      enabled: !ENV [READTHEDOCS, false]
 
 markdown_extensions:
   - footnotes
