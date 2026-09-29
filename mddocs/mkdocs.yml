@@ -73,6 +73,7 @@ plugins:
             inherited_members: true
             show_if_no_docstring: true
   - towncrier
+  - git-revision-date-localized
 
 markdown_extensions:
   - footnotes
