@@ -25,7 +25,7 @@ from syncmaster.exceptions import EntityNotFoundError
 class Repository[Model: Base]:
     def __init__(self, session: AsyncSession):
         self._session = session
-        self._model_type = self.__class__.__orig_bases__[0].__args__[0]  # type: ignore[attr-defined]
+        self._model_type: type[Model] = self.__class__.__orig_bases__[0].__args__[0]  # type: ignore[attr-defined]
 
     async def _read_by_id(self, id: int, **kwargs: Any) -> Model:
         obj = await self._session.get(self._model_type, id)
