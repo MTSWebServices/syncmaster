@@ -5,7 +5,6 @@ from typing import Any, NoReturn
 
 from sqlalchemy import desc, select
 from sqlalchemy.exc import DBAPIError, IntegrityError
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from syncmaster.db.models import Run, RunType, Status, Transfer
@@ -17,9 +16,6 @@ from syncmaster.exceptions.transfer import TransferNotFoundError
 
 
 class RunRepository(Repository[Run]):
-    def __init__(self, session: AsyncSession) -> None:
-        super().__init__(model=Run, session=session)
-
     async def paginate(  # noqa: PLR0917
         self,
         transfer_id: int,

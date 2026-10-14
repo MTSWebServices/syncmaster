@@ -4,7 +4,6 @@ from typing import NoReturn
 
 from sqlalchemy import ScalarResult, insert, select
 from sqlalchemy.exc import DBAPIError, IntegrityError, NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from syncmaster.db.models import Group, GroupMemberRole, Queue, User, UserGroup
 from syncmaster.db.repositories.repository_with_owner import RepositoryWithOwner
@@ -16,9 +15,6 @@ from syncmaster.exceptions.queue import DuplicatedQueueNameError, QueueNotFoundE
 
 
 class QueueRepository(RepositoryWithOwner[Queue]):
-    def __init__(self, session: AsyncSession):
-        super().__init__(model=Queue, session=session)
-
     async def create(self, queue_data: dict) -> Queue:
         query = insert(Queue).values(**queue_data).returning(Queue)
         try:
@@ -124,7 +120,7 @@ class QueueRepository(RepositoryWithOwner[Queue]):
         Method for determining CRUD rights in a repository (self.model) for a resource
         'DEVELOPER' does not have WRITE permission in the QUEUE repository
         """
-        is_exists = await self._session.get(self._model, resource_id)
+        is_exists = await self._session.get(self._model_type, resource_id)
 
         if not is_exists:
             return Permission.NONE
@@ -134,14 +130,14 @@ class QueueRepository(RepositoryWithOwner[Queue]):
 
         owner_query = (
             (
-                select(self._model)
+                select(self._model_type)
                 .join(
                     Group,
-                    Group.id == self._model.group_id,
+                    Group.id == self._model_type.group_id,
                 )
                 .where(
                     Group.owner_id == user.id,
-                    self._model.id == resource_id,
+                    self._model_type.id == resource_id,
                 )
             )
             .exists()
@@ -155,10 +151,10 @@ class QueueRepository(RepositoryWithOwner[Queue]):
         group_role_query = (
             select(UserGroup)
             .join(
-                self._model,
-                UserGroup.group_id == self._model.group_id,
+                self._model_type,
+                UserGroup.group_id == self._model_type.group_id,
             )
-            .where(self._model.id == resource_id, UserGroup.user_id == user.id)
+            .where(self._model_type.id == resource_id, UserGroup.user_id == user.id)
         )
 
         user_group = await self._session.scalar(group_role_query)

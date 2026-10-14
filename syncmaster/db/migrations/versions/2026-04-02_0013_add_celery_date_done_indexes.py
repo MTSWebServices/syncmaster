@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2025-present MTS PJSC
 # SPDX-License-Identifier: Apache-2.0
-"""Add celery_*_date_done indexex
+"""Add celery_*_date_done indices
 
 Revision ID: 0013
 Revises: 0012

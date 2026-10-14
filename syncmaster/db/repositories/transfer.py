@@ -5,7 +5,6 @@ from typing import Any, NoReturn
 
 from sqlalchemy import ScalarResult, insert, or_, select
 from sqlalchemy.exc import DBAPIError, IntegrityError, NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, selectinload
 
 from syncmaster.db.models import Connection, Transfer
@@ -25,9 +24,6 @@ from syncmaster.exceptions.user import UserNotFoundError
 
 
 class TransferRepository(RepositoryWithOwner[Transfer]):
-    def __init__(self, session: AsyncSession):
-        super().__init__(model=Transfer, session=session)
-
     async def paginate(  # noqa: PLR0917
         self,
         page: int,

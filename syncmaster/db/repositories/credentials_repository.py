@@ -25,9 +25,8 @@ class CredentialsRepository(Repository[AuthData]):
         self,
         settings: WorkerAppSettings | SchedulerAppSettings | ServerAppSettings,
         session: AsyncSession,
-        model: type[AuthData],
     ):
-        super().__init__(model=model, session=session)
+        super().__init__(session)
         self._settings = settings
 
     async def read(

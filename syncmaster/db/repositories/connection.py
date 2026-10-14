@@ -4,7 +4,6 @@ from typing import Any, NoReturn
 
 from sqlalchemy import ScalarResult, insert, select
 from sqlalchemy.exc import DBAPIError, IntegrityError, NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from syncmaster.db.models import Connection
 from syncmaster.db.repositories.repository_with_owner import RepositoryWithOwner
@@ -21,9 +20,6 @@ from syncmaster.exceptions.user import UserNotFoundError
 
 
 class ConnectionRepository(RepositoryWithOwner[Connection]):
-    def __init__(self, session: AsyncSession):
-        super().__init__(model=Connection, session=session)
-
     async def paginate(
         self,
         page: int,

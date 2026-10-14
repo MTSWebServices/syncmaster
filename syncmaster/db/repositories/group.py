@@ -5,7 +5,6 @@ from typing import NoReturn
 
 from sqlalchemy import ScalarResult, func, insert, select, update
 from sqlalchemy.exc import DBAPIError, IntegrityError, NoResultFound
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from syncmaster.db.models import Group, GroupMemberRole, User, UserGroup
@@ -23,9 +22,6 @@ from syncmaster.exceptions.user import UserNotFoundError
 
 
 class GroupRepository(Repository[Group]):
-    def __init__(self, session: AsyncSession):
-        super().__init__(model=Group, session=session)
-
     async def paginate_for_superuser(
         self,
         page: int,

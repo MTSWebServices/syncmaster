@@ -6,7 +6,6 @@ from typing import Annotated
 from fastapi import Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from syncmaster.db.models import AuthData
 from syncmaster.db.repositories import (
     ConnectionRepository,
     CredentialsRepository,
@@ -44,7 +43,6 @@ class UnitOfWork:
         self.run = RunRepository(session=session)
         self.credentials = CredentialsRepository(
             session=session,
-            model=AuthData,
             settings=settings,
         )
         self.queue = QueueRepository(session=session)

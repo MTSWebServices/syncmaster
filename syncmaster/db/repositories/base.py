@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2023-present MTS PJSC
 # SPDX-License-Identifier: Apache-2.0
-from abc import ABC
-from typing import Any, Generic, TypeVar, cast
+from typing import Any, cast
 
 from sqlalchemy import (
     ColumnElement,
@@ -22,16 +21,14 @@ from syncmaster.db.models import Base
 from syncmaster.db.utils import Pagination
 from syncmaster.exceptions import EntityNotFoundError
 
-Model = TypeVar("Model", bound=Base)
 
-
-class Repository(ABC, Generic[Model]):
-    def __init__(self, model: type[Model], session: AsyncSession):
-        self._model = model
+class Repository[Model: Base]:
+    def __init__(self, session: AsyncSession):
         self._session = session
+        self._model_type = self.__class__.__orig_bases__[0].__args__[0]  # type: ignore[attr-defined]
 
     async def _read_by_id(self, id: int, **kwargs: Any) -> Model:
-        obj = await self._session.get(self._model, id)
+        obj = await self._session.get(self._model_type, id)
         if obj is None:
             raise EntityNotFoundError
         return obj
@@ -46,7 +43,7 @@ class Repository(ABC, Generic[Model]):
         return {key: getattr(model, key) for key in d}
 
     async def _copy(self, *args: Any, **kwargs: Any) -> Model:
-        query_prev_row = select(self._model).where(*args)
+        query_prev_row = select(self._model_type).where(*args)
         result_prev_row = await self._session.scalars(query_prev_row)
         origin_model = result_prev_row.one()
 
@@ -58,7 +55,7 @@ class Repository(ABC, Generic[Model]):
 
         d.update(kwargs)  # Process kwargs in order to keep only what needs to be updated
         d.pop("search_vector", None)  # 'search_vector' is computed field
-        query_insert_new_row = insert(self._model).values(**d).returning(self._model)
+        query_insert_new_row = insert(self._model_type).values(**d).returning(self._model_type)
         try:
             new_row = await self._session.scalars(query_insert_new_row)
             await self._session.flush()
@@ -68,7 +65,7 @@ class Repository(ABC, Generic[Model]):
         return obj
 
     async def _update(self, *args: Any, **kwargs: Any) -> Model:
-        query = update(self._model).where(*args).values(**kwargs).returning(self._model)
+        query = update(self._model_type).where(*args).values(**kwargs).returning(self._model_type)
         try:
             result = await self._session.scalars(query)
             await self._session.flush()
@@ -78,7 +75,7 @@ class Repository(ABC, Generic[Model]):
         return obj
 
     async def _delete(self, id: int) -> Model:
-        query = delete(self._model).filter_by(id=id).returning(self._model)
+        query = delete(self._model_type).filter_by(id=id).returning(self._model_type)
         result = await self._session.scalars(query)
         await self._session.flush()
         return result.one()
@@ -110,7 +107,7 @@ class Repository(ABC, Generic[Model]):
         )
 
     def _construct_vector_search(self, query: Select, ts_query: ColumnElement) -> Select:
-        search_vector = cast("Mapped[TSVECTOR]", self._model.search_vector)  # type: ignore[attr-defined]
+        search_vector = cast("Mapped[TSVECTOR]", self._model_type.search_vector)  # type: ignore[attr-defined]
         return (
             query.where(search_vector.op("@@")(ts_query))
             .add_columns(func.ts_rank(search_vector, ts_query).label("rank"))
