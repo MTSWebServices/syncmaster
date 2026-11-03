@@ -19,9 +19,6 @@ jobs:
           docker compose -f docker-compose.test.yml --profile all down -v --remove-orphans
           docker compose -f docker-compose.test.yml --profile hive up -d db rabbitmq horizon test-hive
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
