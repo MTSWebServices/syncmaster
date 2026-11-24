@@ -115,6 +115,7 @@ async def test_keycloak_get_user_inactive(
     create_session_cookie,
     mock_keycloak_well_known,
     mock_keycloak_realm,
+    mock_keycloak_token_refresh,
     mock_keycloak_certs,
 ):
     client.cookies = {"session": create_session_cookie(inactive_user)}
