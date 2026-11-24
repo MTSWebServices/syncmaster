@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING, Any
 
 from sqlalchemy.orm import joinedload
@@ -20,7 +19,6 @@ from syncmaster.db.repositories.utils import encrypt_auth_data
 from syncmaster.schemas.v1.transfers import ReadFullTransferSchema
 
 if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator
     from datetime import datetime
 
     from httpx2 import AsyncClient
@@ -30,36 +28,6 @@ if TYPE_CHECKING:
 
     from syncmaster.server.settings import ServerAppSettings as Settings
     from tests.mocks import MockConnection, MockTransfer
-
-
-@asynccontextmanager
-async def create_user_cm(
-    session: AsyncSession,
-    username: str,
-    is_superuser: bool = False,
-    email: str | None = None,
-    first_name: str | None = None,
-    middle_name: str | None = None,
-    last_name: str | None = None,
-) -> AsyncGenerator[User, None]:
-    email = email or f"{username}@user.user"
-    first_name = first_name or f"{username}_first"
-    middle_name = middle_name or f"{username}_middle"
-    last_name = last_name or f"{username}_last"
-    u = User(
-        username=username,
-        email=email,
-        first_name=first_name,
-        middle_name=middle_name,
-        last_name=last_name,
-        is_superuser=is_superuser,
-    )
-    session.add(u)
-    await session.commit()
-    await session.refresh(u)
-    yield u
-    await session.delete(u)
-    await session.commit()
 
 
 async def create_user(

@@ -1,5 +1,5 @@
 import secrets
-from collections.abc import AsyncGenerator
+from collections.abc import Callable
 
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -32,8 +32,8 @@ async def group_transfer(
     connection_type: str | None,
     create_connection_data: dict | None,
     create_transfer_data: dict | None,
-    access_token_factory,
-) -> AsyncGenerator[MockTransfer, None]:
+    access_token_factory: Callable[[int], str],
+) -> MockTransfer:
     group_owner = await create_user(
         session=session,
         username="group_transfer_owner",
@@ -65,7 +65,6 @@ async def group_transfer(
             ),
         )
 
-    await session.commit()
     token = access_token_factory(group_owner.id)
     mock_group = MockGroup(
         group=group,
@@ -116,8 +115,11 @@ async def group_transfer(
         transformations=create_transfer_data.get("transformations", []) if create_transfer_data else [],
         resources=create_transfer_data.get("resources", {}) if create_transfer_data else {},
     )
+    transfer.source_connection = source_connection
+    transfer.target_connection = target_connection
+    transfer.queue = queue
 
-    yield MockTransfer(
+    return MockTransfer(
         transfer=transfer,
         source_connection=MockConnection(
             connection=source_connection,
@@ -137,12 +139,3 @@ async def group_transfer(
         ),
         owner_group=mock_group,
     )
-    await session.delete(transfer)
-    await session.delete(source_connection)
-    await session.delete(target_connection)
-    await session.delete(group)
-    await session.delete(group_owner)
-    await session.delete(queue)
-    for member in members:
-        await session.delete(member.user)
-    await session.commit()

@@ -43,9 +43,6 @@ async def test_maintainer_plus_can_create_queue(
     assert queue.description == "Some interesting description"
     assert queue.slug == f"{mock_group.group.id}-new_queue123"
 
-    await session.delete(queue)
-    await session.commit()
-
 
 async def test_superuser_can_create_queue(
     client: AsyncClient,
@@ -78,9 +75,6 @@ async def test_superuser_can_create_queue(
     assert queue.name == "New queue"
     assert queue.description == "Some interesting description"
     assert queue.slug == f"{mock_group.group.id}-new_queue"
-
-    await session.delete(queue)
-    await session.commit()
 
 
 async def test_developer_or_below_cannot_create_queue(

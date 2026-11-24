@@ -44,7 +44,7 @@ async def test_developer_plus_can_create_run_of_transfer_his_group(
         await session.scalars(
             select(Run).filter_by(transfer_id=group_transfer.id, status=Status.CREATED).order_by(desc(Run.created_at)),
         )
-    ).first()
+    ).one()
 
     assert response.json() == {
         "id": run.id,

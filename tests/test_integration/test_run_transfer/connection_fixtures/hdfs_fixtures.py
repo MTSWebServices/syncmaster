@@ -127,6 +127,4 @@ async def hdfs_connection(
         ),
     )
 
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result

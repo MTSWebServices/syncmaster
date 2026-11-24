@@ -49,9 +49,7 @@ async def postgres_to_iceberg_rest_s3(
         transformations=transformations,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest_asyncio.fixture
@@ -83,9 +81,7 @@ async def iceberg_rest_s3_to_postgres(
         transformations=transformations,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest.mark.parametrize(

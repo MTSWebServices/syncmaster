@@ -1,4 +1,4 @@
-from collections.abc import AsyncGenerator, Callable
+from collections.abc import Callable
 
 import pytest
 import pytest_asyncio
@@ -6,27 +6,27 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from tests.mocks import MockUser, UserTestRoles
 from tests.test_unit.conftest import add_user_to_group
-from tests.test_unit.utils import create_group, create_user, create_user_cm
+from tests.test_unit.utils import create_group, create_user
 
 
 @pytest_asyncio.fixture
-async def superuser(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockUser, None]:
-    async with create_user_cm(session, username="superuser", is_superuser=True) as user:
-        yield MockUser(
-            user=user,
-            auth_token=access_token_factory(user.id),
-            role=UserTestRoles.Superuser,
-        )
+async def superuser(session: AsyncSession, access_token_factory) -> MockUser:
+    user = await create_user(session, username="superuser", is_superuser=True)
+    return MockUser(
+        user=user,
+        auth_token=access_token_factory(user.id),
+        role=UserTestRoles.Superuser,
+    )
 
 
 @pytest_asyncio.fixture
-async def simple_user(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockUser, None]:
-    async with create_user_cm(session, username="simple_user") as user:
-        yield MockUser(
-            user=user,
-            auth_token=access_token_factory(user.id),
-            role=UserTestRoles.Developer,
-        )
+async def simple_user(session: AsyncSession, access_token_factory) -> MockUser:
+    user = await create_user(session, username="simple_user")
+    return MockUser(
+        user=user,
+        auth_token=access_token_factory(user.id),
+        role=UserTestRoles.Developer,
+    )
 
 
 @pytest_asyncio.fixture(params=[5])
@@ -34,7 +34,7 @@ async def simple_users(
     request: pytest.FixtureRequest,
     session: AsyncSession,
     access_token_factory: Callable[[int], str],
-) -> AsyncGenerator[list[MockUser], None]:
+) -> list[MockUser]:
     size = request.param
     users = []
     for i in range(size):
@@ -56,21 +56,15 @@ async def simple_users(
         )
         users.append(mock_user)
 
-    await session.commit()
-
-    yield users
-
-    for user in users:
-        await session.delete(user)
-    await session.commit()
+    return users
 
 
 @pytest_asyncio.fixture
 async def user_with_many_roles(
     session: AsyncSession,
     simple_user: MockUser,
-    access_token_factory,
-) -> AsyncGenerator[MockUser, None]:
+    access_token_factory: Callable[[int], str],
+) -> MockUser:
     user = await create_user(
         session=session,
         username="multi_role_user",
@@ -96,18 +90,10 @@ async def user_with_many_roles(
             await add_user_to_group(user=user, group_id=group.id, session=session, role=role)
         groups.append(group)
 
-    await session.commit()
-
     token = access_token_factory(user.id)
     mock_user = MockUser(
         user=user,
         auth_token=token,
     )
 
-    yield mock_user
-
-    for group in groups:
-        await session.delete(group)
-
-    await session.delete(user)
-    await session.commit()
+    return mock_user

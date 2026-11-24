@@ -91,12 +91,11 @@ kerberos = [
 
 [dependency-groups]
 test = [
-  "pytest~=8.4.2",
+  "pytest~=9.2.0",
   "httpx2~=2.16.0",
-  "pytest-asyncio>=0.26.0,<1.0",
+  "pytest-asyncio~=1.5.0",
   "pytest-randomly~=5.1.0",
-  "pytest-rerunfailures~=16.1",
-  "pytest-deadfixtures~=3.1.0",
+  "pytest-rerunfailures~=16.2",
   "pytest-mock~=3.17.0",
   "pytest-lazy-fixtures~=1.4.0",
   "pytest-clarity~=1.0.1",
@@ -230,6 +229,7 @@ markers = [
     "postgres: tests on Postgres",
     "oracle: tests for Oracle",
     "clickhouse: tests for Clickhouse",
+    "iceberg: tests for Iceberg",
     "mysql: tests for MySQL",
     "mssql: tests for MSSQL",
     "hdfs: tests for hadoop hdfs",
@@ -239,6 +239,11 @@ markers = [
     "sftp: tests for SFTP",
     "samba: tests for Samba",
     "webdav: tests for WebDAV",
+]
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+filterwarnings = [
+    "ignore:Module already imported so cannot be rewritten:pytest.PytestAssertRewriteWarning",
 ]
 
 [tool.coverage.run]

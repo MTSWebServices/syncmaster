@@ -1,5 +1,4 @@
 import secrets
-from collections.abc import AsyncGenerator
 
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,7 +38,7 @@ async def group_transfer_with_same_name_maintainer_plus(
     group_transfer: MockTransfer,
     role_maintainer_plus: UserTestRoles,
     role_maintainer_or_below_without_guest: UserTestRoles,
-) -> AsyncGenerator[str, None]:
+) -> str:
     user = group_transfer.owner_group.get_member_of_role(role_maintainer_plus)
 
     await add_user_to_group(
@@ -70,7 +69,7 @@ async def group_transfer_with_same_name_maintainer_plus(
         connection_id=target_connection.id,
     )
 
-    transfer = await create_transfer(
+    await create_transfer(
         session=session,
         name="duplicated_group_transfer",
         group_id=group_queue.group_id,
@@ -79,11 +78,7 @@ async def group_transfer_with_same_name_maintainer_plus(
         queue_id=group_queue.id,
     )
 
-    yield role_maintainer_plus
-    await session.delete(source_connection)
-    await session.delete(target_connection)
-    await session.delete(transfer)
-    await session.commit()
+    return role_maintainer_plus
 
 
 @pytest_asyncio.fixture
@@ -114,7 +109,7 @@ async def group_transfer_and_group_connection_developer_plus(
     role_developer_plus: UserTestRoles,
     role_maintainer_or_below_without_guest: UserTestRoles,
     settings: Settings,
-) -> AsyncGenerator[tuple[str, Connection], None]:
+) -> tuple[str, Connection]:
     user = group_transfer.owner_group.get_member_of_role(role_developer_plus)
 
     await add_user_to_group(
@@ -136,9 +131,7 @@ async def group_transfer_and_group_connection_developer_plus(
         connection_id=connection.id,
     )
 
-    yield role_developer_plus, connection
-    await session.delete(connection)
-    await session.commit()
+    return role_developer_plus, connection
 
 
 @pytest_asyncio.fixture

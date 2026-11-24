@@ -1,5 +1,3 @@
-from collections.abc import AsyncGenerator
-
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +13,7 @@ async def group_transfers(
     group_transfer: MockTransfer,
     session: AsyncSession,
     settings: Settings,
-) -> AsyncGenerator[list[MockTransfer], None]:
+) -> list[MockTransfer]:
     group = group_transfer.owner_group.group
     queue = group_transfer.transfer.queue
     mock_group = group_transfer.owner_group
@@ -128,13 +126,4 @@ async def group_transfers(
         source_connections.append(source_connection)
         target_connections.append(target_connection)
 
-    await session.commit()
-
-    yield transfers
-
-    for transfer in transfers[1:]:  # skip the transfer from group_transfer
-        await session.delete(transfer.transfer)
-    for connection in source_connections[1:] + target_connections[1:]:  # skip connections from group_transfer
-        await session.delete(connection)
-
-    await session.commit()
+    return transfers

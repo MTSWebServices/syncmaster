@@ -3,7 +3,7 @@ import secrets
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from syncmaster.db.models import Queue
+from syncmaster.db.models import Queue, Transfer
 from syncmaster.server.settings import ServerAppSettings as Settings
 from tests.mocks import MockTransfer
 from tests.test_unit.utils import create_connection, create_credentials, create_transfer
@@ -15,7 +15,7 @@ async def group_transfer_with_same_name(
     settings: Settings,
     group_queue: Queue,
     group_transfer: MockTransfer,
-) -> None:
+) -> Transfer:
     source_connection = await create_connection(
         session=session,
         name=secrets.token_hex(5),
@@ -45,9 +45,4 @@ async def group_transfer_with_same_name(
         target_connection_id=target_connection.id,
         queue_id=group_queue.id,
     )
-
-    yield
-    await session.delete(source_connection)
-    await session.delete(target_connection)
-    await session.delete(transfer)
-    await session.commit()
+    return transfer

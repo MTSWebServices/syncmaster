@@ -50,9 +50,7 @@ async def postgres_to_oracle(
         transformations=transformations,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest_asyncio.fixture
@@ -84,9 +82,7 @@ async def oracle_to_postgres(
         transformations=transformations,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest.mark.parametrize(

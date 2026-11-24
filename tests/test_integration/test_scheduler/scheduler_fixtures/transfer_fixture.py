@@ -1,4 +1,4 @@
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
 
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,7 +30,7 @@ async def group_transfer_integration_mock(
     settings: Settings,
     create_connection_data: dict | None,
     create_transfer_data: dict | None,
-    access_token_factory,
+    access_token_factory: Callable[[int], str],
 ) -> AsyncGenerator[MockTransfer, None]:
     group_owner = await create_user(
         session=session,
@@ -64,7 +64,6 @@ async def group_transfer_integration_mock(
             ),
         )
 
-    await session.commit()
     mock_group = MockGroup(
         group=group,
         owner=MockUser(
@@ -110,7 +109,7 @@ async def group_transfer_integration_mock(
         resources=create_transfer_data.get("resources") if create_transfer_data else None,
     )
 
-    yield MockTransfer(
+    return MockTransfer(
         transfer=transfer,
         source_connection=MockConnection(
             connection=source_connection,
@@ -130,12 +129,3 @@ async def group_transfer_integration_mock(
         ),
         owner_group=mock_group,
     )
-    await session.delete(transfer)
-    await session.delete(source_connection)
-    await session.delete(target_connection)
-    await session.delete(group)
-    await session.delete(group_owner)
-    await session.delete(queue)
-    for member in members:
-        await session.delete(member.user)
-    await session.commit()

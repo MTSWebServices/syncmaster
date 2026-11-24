@@ -64,9 +64,7 @@ async def hdfs_to_postgres(
         },
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest_asyncio.fixture(params=[""])
@@ -104,9 +102,7 @@ async def postgres_to_hdfs(
         strategy_params=strategy,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest.mark.parametrize(
