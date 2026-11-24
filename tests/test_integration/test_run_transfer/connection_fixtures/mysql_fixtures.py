@@ -119,6 +119,4 @@ async def mysql_connection(
         ),
     )
 
-    yield syncmaster_conn
-    await session.delete(syncmaster_conn)
-    await session.commit()
+    return syncmaster_conn

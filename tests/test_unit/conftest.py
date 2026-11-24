@@ -1,5 +1,5 @@
 import secrets
-from collections.abc import AsyncGenerator
+from collections.abc import Callable
 
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,7 +36,7 @@ async def create_group_member(
     username: str,
     group_id: int,
     session: AsyncSession,
-    access_token_factory,
+    access_token_factory: Callable[[int], str],
 ) -> MockUser:
     role_name = username.rsplit("_", maxsplit=1)[-1]
 
@@ -62,6 +62,7 @@ async def create_group_member(
             role=role,
         ),
     )
+    await session.commit()
 
     token = access_token_factory(user.id)
     return MockUser(
@@ -88,7 +89,7 @@ async def add_user_to_group(
 
 
 @pytest_asyncio.fixture
-async def empty_group(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockGroup, None]:
+async def empty_group(session: AsyncSession, access_token_factory) -> MockGroup:
     owner = await create_user(
         session=session,
         username="empty_group_owner",
@@ -99,7 +100,7 @@ async def empty_group(session: AsyncSession, access_token_factory) -> AsyncGener
         owner_id=owner.id,
     )
     token = access_token_factory(owner.id)
-    yield MockGroup(
+    return MockGroup(
         group=group,
         owner=MockUser(
             user=owner,
@@ -108,13 +109,10 @@ async def empty_group(session: AsyncSession, access_token_factory) -> AsyncGener
         ),
         members=[],
     )
-    await session.delete(group)
-    await session.delete(owner)
-    await session.commit()
 
 
 @pytest_asyncio.fixture
-async def group(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockGroup, None]:
+async def group(session: AsyncSession, access_token_factory) -> MockGroup:
     owner = await create_user(
         session=session,
         username="notempty_group_owner",
@@ -136,9 +134,8 @@ async def group(session: AsyncSession, access_token_factory) -> AsyncGenerator[M
             ),
         )
 
-    await session.commit()
     token = access_token_factory(owner.id)
-    yield MockGroup(
+    return MockGroup(
         group=group,
         owner=MockUser(
             user=owner,
@@ -147,18 +144,13 @@ async def group(session: AsyncSession, access_token_factory) -> AsyncGenerator[M
         ),
         members=members,
     )
-    await session.delete(group)
-    await session.delete(owner)
-    for member in members:
-        await session.delete(member.user)
-    await session.commit()
 
 
 @pytest_asyncio.fixture
 async def mock_group(
     session: AsyncSession,
-    access_token_factory,
-) -> AsyncGenerator[MockGroup, None]:
+    access_token_factory: Callable[[int], str],
+) -> MockGroup:
     group_owner = await create_user(
         session=session,
         username=f"{secrets.token_hex(5)}_group_connection_owner",
@@ -184,9 +176,7 @@ async def mock_group(
             ),
         )
 
-    await session.commit()
-
-    yield MockGroup(
+    return MockGroup(
         group=group,
         owner=MockUser(
             user=group_owner,
@@ -195,45 +185,30 @@ async def mock_group(
         ),
         members=members,
     )
-    await session.delete(group_owner)
-    await session.delete(group)
-    for member in members:
-        await session.delete(member.user)
-    await session.commit()
 
 
 @pytest_asyncio.fixture
 async def group_queue(
     session: AsyncSession,
     mock_group: MockGroup,
-) -> AsyncGenerator[Queue, None]:
-    queue = await create_queue(
+) -> Queue:
+    return await create_queue(
         session=session,
         name=f"{secrets.token_hex(5)}_test_queue",
         group_id=mock_group.id,
     )
-
-    yield queue
-
-    await session.delete(queue)
-    await session.commit()
 
 
 @pytest_asyncio.fixture
 async def mock_queue(
     session: AsyncSession,
     group: MockGroup,
-) -> AsyncGenerator[Queue, None]:
-    queue = await create_queue(
+) -> Queue:
+    return await create_queue(
         session=session,
         name=f"{secrets.token_hex(5)}_test_queue",
         group_id=group.group.id,
     )
-
-    yield queue
-
-    await session.delete(queue)
-    await session.commit()
 
 
 @pytest_asyncio.fixture
@@ -251,7 +226,7 @@ async def two_group_connections(
     settings: Settings,
     mock_group: MockGroup,
     group_queue: Queue,  # do not delete
-) -> AsyncGenerator[tuple[MockConnection, MockConnection], None]:
+) -> tuple[MockConnection, MockConnection]:
     connection1 = await create_connection(
         session=session,
         name=f"{secrets.token_hex(5)}_group_for_group_connection",
@@ -280,7 +255,7 @@ async def two_group_connections(
         connection_id=connection2.id,
     )
 
-    yield (
+    return (
         MockConnection(
             credentials=MockCredentials(
                 value=decrypt_auth_data(credentials1.value, settings=settings),
@@ -298,9 +273,6 @@ async def two_group_connections(
             owner_group=mock_group,
         ),
     )
-    await session.delete(connection1)
-    await session.delete(connection2)
-    await session.commit()
 
 
 @pytest_asyncio.fixture
@@ -345,7 +317,7 @@ async def group_connection_with_same_name_maintainer_plus(
     group_connection: MockConnection,
     role_maintainer_plus: UserTestRoles,
     role_maintainer_or_below_without_guest: UserTestRoles,
-) -> AsyncGenerator[str, None]:
+) -> str:
     user = group_connection.owner_group.get_member_of_role(role_maintainer_plus)
 
     await add_user_to_group(
@@ -360,16 +332,13 @@ async def group_connection_with_same_name_maintainer_plus(
         group_id=empty_group.group.id,
     )
 
-    credentials = await create_credentials(
+    await create_credentials(
         session=session,
         settings=settings,
         connection_id=connection.id,
     )
 
-    yield role_maintainer_plus
-    await session.delete(connection)
-    await session.delete(credentials)
-    await session.commit()
+    return role_maintainer_plus
 
 
 @pytest_asyncio.fixture
@@ -378,23 +347,19 @@ async def group_connection_with_same_name(
     settings: Settings,
     empty_group: MockGroup,
     group_connection: MockConnection,
-) -> AsyncGenerator[None, None]:
+) -> MockConnection:
     connection = await create_connection(
         session=session,
         name=group_connection.connection.name,
         group_id=empty_group.group.id,
     )
 
-    credentials = await create_credentials(
+    await create_credentials(
         session=session,
         settings=settings,
         connection_id=connection.id,
     )
-
-    yield
-    await session.delete(connection)
-    await session.delete(credentials)
-    await session.commit()
+    return group_connection
 
 
 @pytest_asyncio.fixture

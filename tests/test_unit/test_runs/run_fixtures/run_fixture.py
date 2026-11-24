@@ -40,7 +40,6 @@ async def group_run(session: AsyncSession, access_token_factory) -> MockRun:
                 access_token_factory=access_token_factory,
             ),
         )
-    await session.commit()
     token = access_token_factory(group_owner.id)
     mock_group = MockGroup(
         group=group,
@@ -85,15 +84,4 @@ async def group_run(session: AsyncSession, access_token_factory) -> MockRun:
     )
     run = await create_run(session=session, transfer_id=transfer.id)
 
-    yield MockRun(run=run, transfer=mock_transfer)
-
-    await session.delete(run)
-    await session.delete(transfer)
-    await session.delete(source_connection)
-    await session.delete(target_connection)
-    await session.delete(group)
-    await session.delete(group_owner)
-    await session.delete(queue)
-    for member in members:
-        await session.delete(member.user)
-    await session.commit()
+    return MockRun(run=run, transfer=mock_transfer)

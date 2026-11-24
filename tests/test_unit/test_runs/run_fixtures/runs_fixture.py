@@ -42,8 +42,4 @@ async def group_runs(group_run: MockRun, session: AsyncSession) -> list[MockRun]
 
     await session.commit()
 
-    yield runs
-
-    for mock_run in runs[1:]:
-        await session.delete(mock_run.run)
-    await session.commit()
+    return runs

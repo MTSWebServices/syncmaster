@@ -45,9 +45,7 @@ async def webdav_connection(
         ),
     )
 
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest.fixture(

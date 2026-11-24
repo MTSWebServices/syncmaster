@@ -1,5 +1,3 @@
-from collections.abc import AsyncGenerator
-
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,7 +9,7 @@ from tests.mocks import MockConnection
 async def group_connections(
     group_connection: MockConnection,
     session: AsyncSession,
-) -> AsyncGenerator[list[MockConnection], None]:
+) -> list[MockConnection]:
     connection = group_connection.connection
 
     # start with the connection from group_connection fixture
@@ -92,8 +90,4 @@ async def group_connections(
 
     await session.commit()
 
-    yield connections
-
-    for mock_connection in connections[1:]:
-        await session.delete(mock_connection.connection)
-    await session.commit()
+    return connections

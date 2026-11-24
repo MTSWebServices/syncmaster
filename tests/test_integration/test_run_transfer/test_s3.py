@@ -66,9 +66,7 @@ async def s3_to_postgres(
         transformations=transformations,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest_asyncio.fixture(params=[""])
@@ -108,9 +106,7 @@ async def postgres_to_s3(
         transformations=transformations,
         queue_id=queue.id,
     )
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result
 
 
 @pytest.mark.parametrize(

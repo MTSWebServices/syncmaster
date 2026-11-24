@@ -17,8 +17,6 @@ async def test_developer_plus_can_create_connection(
     session: AsyncSession,
     settings: Settings,
     role_developer_plus: UserTestRoles,
-    event_loop,
-    request,
 ):
     user = group.get_member_of_role(role_developer_plus)
 
@@ -50,7 +48,7 @@ async def test_developer_plus_can_create_connection(
                 name="New connection",
             ),
         )
-    ).first()
+    ).one()
 
     creds = (
         await session.scalars(
@@ -59,16 +57,6 @@ async def test_developer_plus_can_create_connection(
             ),
         )
     ).one()
-
-    def delete_rows():
-        async def afin():
-            await session.delete(creds)
-            await session.delete(connection)
-            await session.commit()
-
-        event_loop.run_until_complete(afin())
-
-    request.addfinalizer(delete_rows)
 
     decrypted = decrypt_auth_data(creds.value, settings=settings)
     assert response.json() == {

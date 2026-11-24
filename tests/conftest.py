@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import os
 import time
@@ -13,6 +12,7 @@ from alembic.config import Config as AlembicConfig
 from celery import Celery
 from fastapi import FastAPI
 from httpx2 import ASGITransport, AsyncClient
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -53,14 +53,6 @@ def access_token_factory(access_token_settings: JWTSettings) -> Callable[[int], 
         )
 
     return _generate_access_token
-
-
-@pytest.fixture(scope="session")
-def event_loop():
-    policy = asyncio.get_event_loop_policy()
-    loop = policy.new_event_loop()
-    yield loop
-    loop.close()
 
 
 @pytest.fixture(scope="session", params=[{}])
@@ -114,11 +106,22 @@ async def sessionmaker(async_engine: AsyncEngine):
 
 @pytest_asyncio.fixture
 async def session(sessionmaker: async_sessionmaker[AsyncSession]):
+    session: AsyncSession = sessionmaker()
+
     try:
-        session: AsyncSession = sessionmaker()
         yield session
+        await session.commit()
+    except Exception:
+        await session.rollback()
+        raise
     finally:
         await session.close()
+
+        # cleanup everything the test created
+        async with sessionmaker() as another_session:
+            for table in reversed(Base.metadata.sorted_tables):
+                await another_session.execute(delete(table))
+            await another_session.commit()
 
 
 @pytest.fixture(scope="session")

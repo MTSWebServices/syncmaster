@@ -146,6 +146,4 @@ async def iceberg_rest_s3_connection(
         ),
     )
 
-    yield result
-    await session.delete(result)
-    await session.commit()
+    return result

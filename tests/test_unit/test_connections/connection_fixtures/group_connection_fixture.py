@@ -1,5 +1,5 @@
 import secrets
-from collections.abc import AsyncGenerator
+from collections.abc import Callable
 
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,8 +29,8 @@ async def group_connection(
     connection_type: str | None,
     create_connection_data: dict | None,
     create_connection_auth_data: dict | None,
-    access_token_factory,
-) -> AsyncGenerator[MockConnection, None]:
+    access_token_factory: Callable[[int], str],
+) -> MockConnection:
     group_owner = await create_user(
         session=session,
         username=f"{secrets.token_hex(5)}_group_connection_owner",
@@ -55,7 +55,6 @@ async def group_connection(
             ),
         )
 
-    await session.commit()
     connection = await create_connection(
         session=session,
         name=f"{secrets.token_hex(5)}_group_for_group_connection",
@@ -71,7 +70,7 @@ async def group_connection(
         auth_data=create_connection_auth_data,
     )
     token = access_token_factory(group_owner.id)
-    yield MockConnection(
+    return MockConnection(
         credentials=MockCredentials(
             value=decrypt_auth_data(credentials.value, settings=settings),
             connection_id=connection.id,
@@ -87,10 +86,3 @@ async def group_connection(
             members=members,
         ),
     )
-    await session.delete(credentials)
-    await session.delete(connection)
-    await session.delete(group_owner)
-    await session.delete(group)
-    for member in members:
-        await session.delete(member.user)
-    await session.commit()

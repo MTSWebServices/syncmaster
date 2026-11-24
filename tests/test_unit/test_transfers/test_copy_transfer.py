@@ -1,9 +1,8 @@
 import secrets
-from operator import or_
 
 import pytest
 from httpx2 import AsyncClient
-from sqlalchemy import delete, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from syncmaster.db.models import Connection, Queue, Transfer
@@ -16,8 +15,6 @@ pytestmark = [pytest.mark.asyncio, pytest.mark.server]
 async def test_maintainer_plus_can_copy_transfer_with_remove_source(
     client: AsyncClient,
     session: AsyncSession,
-    request,
-    event_loop,
     group_transfer_and_group_maintainer_plus: str,
     group_transfer: MockTransfer,
     group_queue: Queue,
@@ -26,6 +23,7 @@ async def test_maintainer_plus_can_copy_transfer_with_remove_source(
     user = group_transfer.owner_group.get_member_of_role(role)
 
     old_transfer = await session.get(Transfer, group_transfer.id)
+    assert old_transfer
 
     new_transfer_query = select(Transfer).filter(
         Transfer.group_id == group_queue.group_id,
@@ -66,21 +64,6 @@ async def test_maintainer_plus_can_copy_transfer_with_remove_source(
         "resources": old_transfer.resources,
     }
 
-    def delete_rows():
-        async def afin():
-            delete_new_connections_query = delete(Connection).where(
-                or_(
-                    Connection.id == new_transfer.source_connection_id,
-                    Connection.id == new_transfer.target_connection_id,
-                ),
-            )
-            await session.execute(delete_new_connections_query)
-            await session.commit()
-
-        event_loop.run_until_complete(afin())
-
-    request.addfinalizer(delete_rows)
-
     # New connections were created
     new_source_connection = await session.get(Connection, new_transfer.source_connection_id)
     new_target_connection = await session.get(Connection, new_transfer.target_connection_id)
@@ -102,17 +85,16 @@ async def test_maintainer_plus_can_copy_transfer_with_remove_source(
 async def test_maintainer_plus_can_copy_transfer_with_new_name(
     client: AsyncClient,
     session: AsyncSession,
-    event_loop,
     group_transfer_and_group_maintainer_plus: str,
     group_transfer: MockTransfer,
     group_queue: Queue,
-    request,
 ):
     role = group_transfer_and_group_maintainer_plus
     user = group_transfer.owner_group.get_member_of_role(role)
     new_name = f"{secrets.token_hex(5)}"
 
     old_transfer = await session.get(Transfer, group_transfer.id)
+    assert old_transfer
 
     new_transfer_query = select(Transfer).filter(
         Transfer.group_id == group_queue.group_id,
@@ -153,21 +135,6 @@ async def test_maintainer_plus_can_copy_transfer_with_new_name(
         "resources": old_transfer.resources,
     }
 
-    def delete_rows():
-        async def afin():
-            delete_new_connections_query = delete(Connection).where(
-                or_(
-                    Connection.id == new_transfer.source_connection_id,
-                    Connection.id == new_transfer.target_connection_id,
-                ),
-            )
-            await session.execute(delete_new_connections_query)
-            await session.commit()
-
-        event_loop.run_until_complete(afin())
-
-    request.addfinalizer(delete_rows)
-
     # New connections were created
     new_source_connection = await session.get(Connection, new_transfer.source_connection_id)
     new_target_connection = await session.get(Connection, new_transfer.target_connection_id)
@@ -189,8 +156,6 @@ async def test_maintainer_plus_can_copy_transfer_with_new_name(
 async def test_developer_plus_can_copy_transfer_without_remove_source(
     client: AsyncClient,
     session: AsyncSession,
-    request,
-    event_loop,
     group_transfer_and_group_developer_plus: str,
     group_transfer: MockTransfer,
     group_queue: Queue,
@@ -199,6 +164,7 @@ async def test_developer_plus_can_copy_transfer_without_remove_source(
     user = group_transfer.owner_group.get_member_of_role(role)
 
     old_transfer = await session.get(Transfer, group_transfer.id)
+    assert old_transfer
 
     new_transfer_query = select(Transfer).filter(
         Transfer.group_id == group_queue.group_id,
@@ -238,21 +204,6 @@ async def test_developer_plus_can_copy_transfer_without_remove_source(
         "transformations": old_transfer.transformations,
         "resources": old_transfer.resources,
     }
-
-    def delete_rows():
-        async def afin():
-            delete_new_connections_query = delete(Connection).where(
-                or_(
-                    Connection.id == new_transfer.source_connection_id,
-                    Connection.id == new_transfer.target_connection_id,
-                ),
-            )
-            await session.execute(delete_new_connections_query)
-            await session.commit()
-
-        event_loop.run_until_complete(afin())
-
-    request.addfinalizer(delete_rows)
 
     # New connections were created
     new_source_connection = await session.get(Connection, new_transfer.source_connection_id)
@@ -304,13 +255,12 @@ async def test_developer_or_below_cannot_copy_transfer_with_remove_source(
 async def test_superuser_can_copy_transfer_with_remove_source(
     client: AsyncClient,
     session: AsyncSession,
-    request,
-    event_loop,
     superuser: MockUser,
     group_transfer: MockTransfer,
     group_queue: Queue,
 ):
     old_transfer = await session.get(Transfer, group_transfer.id)
+    assert old_transfer
 
     new_transfer_query = select(Transfer).filter(
         Transfer.group_id == group_queue.group_id,
@@ -350,21 +300,6 @@ async def test_superuser_can_copy_transfer_with_remove_source(
         "transformations": old_transfer.transformations,
         "resources": old_transfer.resources,
     }
-
-    def delete_rows():
-        async def afin():
-            delete_new_connections_query = delete(Connection).where(
-                or_(
-                    Connection.id == new_transfer.source_connection_id,
-                    Connection.id == new_transfer.target_connection_id,
-                ),
-            )
-            await session.execute(delete_new_connections_query)
-            await session.commit()
-
-        event_loop.run_until_complete(afin())
-
-    request.addfinalizer(delete_rows)
 
     # New connections were created
     new_source_connection = await session.get(Connection, new_transfer.source_connection_id)
