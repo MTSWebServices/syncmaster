@@ -71,6 +71,7 @@ def get_spark_session_conf(
     memory_mb: int = math.ceil(resources["ram_bytes_per_task"] / 1024 / 1024)
 
     config: dict[str, str | int] = {
+        "spark.ui.showConsoleProgress": "false",
         "spark.sql.pyspark.jvmStacktrace.enabled": "true",
         "spark.hadoop.mapreduce.fileoutputcommitter.marksuccessfuljobs": "false",
     }

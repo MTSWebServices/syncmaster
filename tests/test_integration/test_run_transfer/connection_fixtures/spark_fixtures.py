@@ -37,7 +37,10 @@ def spark(  # noqa: C901
     spark = (
         SparkSession.builder.appName("celery_worker")
         .config("spark.sql.pyspark.jvmStacktrace.enabled", "true")
-        .config("spark.driver.host", "localhost")
+        .config("spark.driver.host", "127.0.0.1")
+        .config("spark.driver.bindAddress", "0.0.0.0")
+        .config("spark.ui.enabled", "false")
+        .config("spark.ui.showConsoleProgress", "false")
         .config("spark.hadoop.mapreduce.fileoutputcommitter.marksuccessfuljobs", "false")
     )
 
