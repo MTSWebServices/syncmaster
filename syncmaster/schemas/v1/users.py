@@ -23,10 +23,6 @@ class ReadUserSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class FullUserSchema(ReadGroupMember):
-    is_active: bool
-
-
 class UserPageSchemaAsGroupMember(PageSchema):
     items: list[ReadGroupMember]
 

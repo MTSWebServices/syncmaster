@@ -21,7 +21,7 @@ OAUTH2GATEWAY_AUTH_SETTINGS = {
 
 
 @pytest.mark.parametrize("settings", [OAUTH2GATEWAY_AUTH_SETTINGS], indirect=True)
-async def test_get_keycloak_token_active(
+async def test_get_keycloak_token(
     client: AsyncClient,
     simple_user: MockUser,
     settings: Settings,
@@ -42,32 +42,4 @@ async def test_get_keycloak_token_active(
         "id": simple_user.id,
         "is_superuser": simple_user.is_superuser,
         "username": simple_user.username,
-    }
-
-
-@pytest.mark.parametrize("settings", [OAUTH2GATEWAY_AUTH_SETTINGS], indirect=True)
-async def test_get_keycloak_token_inactive(
-    client: AsyncClient,
-    simple_user: MockUser,
-    inactive_user: MockUser,
-    settings: Settings,
-    mock_keycloak_introspect_token,
-):
-    mock_keycloak_introspect_token(inactive_user)
-
-    headers = {
-        "Authorization": "Bearer token",
-    }
-
-    response = await client.get(
-        f"/v1/users/{simple_user.id}",
-        headers=headers,
-    )
-    assert response.status_code == 401, response.text
-    assert response.json() == {
-        "error": {
-            "code": "unauthorized",
-            "details": None,
-            "message": "Not authenticated",
-        },
     }

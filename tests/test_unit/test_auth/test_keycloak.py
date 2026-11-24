@@ -62,11 +62,10 @@ async def test_keycloak_get_user_authorized(
     mock_keycloak_token_refresh,
     mock_keycloak_certs,
 ):
-    client.cookies.clear()
     session_cookie = create_session_cookie(simple_user)
+    client.cookies = {"session": session_cookie}
     response = await client.get(
         f"/v1/users/{simple_user.id}",
-        cookies={"session": session_cookie},
     )
 
     assert response.status_code == 200, response.text
@@ -89,7 +88,7 @@ async def test_keycloak_get_user_expired_access_token(
     mock_keycloak_token_refresh,
     mock_keycloak_certs,
 ):
-    session_cookie = create_session_cookie(simple_user, expire_in_msec=-100000000)  # expired access token
+    session_cookie = create_session_cookie(simple_user, expire_in_msec=-1000)  # expired access token
     client.cookies = {"session": session_cookie}
     with caplog.at_level(logging.DEBUG):
         response = await client.get(f"/v1/users/{simple_user.id}")
@@ -103,30 +102,6 @@ async def test_keycloak_get_user_expired_access_token(
         "id": simple_user.id,
         "is_superuser": simple_user.is_superuser,
         "username": simple_user.username,
-    }
-
-
-@pytest.mark.parametrize("settings", [KEYCLOAK_AUTH_SETTINGS], indirect=True)
-async def test_keycloak_get_user_inactive(
-    client: AsyncClient,
-    simple_user: MockUser,
-    inactive_user: MockUser,
-    settings: Settings,
-    create_session_cookie,
-    mock_keycloak_well_known,
-    mock_keycloak_realm,
-    mock_keycloak_token_refresh,
-    mock_keycloak_certs,
-):
-    client.cookies = {"session": create_session_cookie(inactive_user)}
-    response = await client.get(f"/v1/users/{simple_user.id}")
-    assert response.status_code == 403, response.text
-    assert response.json() == {
-        "error": {
-            "code": "forbidden",
-            "message": "You have no power here",
-            "details": None,
-        },
     }
 
 

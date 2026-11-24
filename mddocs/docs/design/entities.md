@@ -79,7 +79,6 @@ erDiagram
     User {
         number id
         string username
-        string is_active
         string is_superuser
         string created_at
         string updated_at

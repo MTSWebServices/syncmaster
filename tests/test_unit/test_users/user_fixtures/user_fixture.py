@@ -11,22 +11,20 @@ from tests.test_unit.utils import create_group, create_user, create_user_cm
 
 @pytest_asyncio.fixture
 async def superuser(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockUser, None]:
-    async with create_user_cm(session, username="superuser", is_active=True, is_superuser=True) as user:
-        token = access_token_factory(user.id)
+    async with create_user_cm(session, username="superuser", is_superuser=True) as user:
         yield MockUser(
             user=user,
-            auth_token=token,
+            auth_token=access_token_factory(user.id),
             role=UserTestRoles.Superuser,
         )
 
 
 @pytest_asyncio.fixture
 async def simple_user(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockUser, None]:
-    async with create_user_cm(session, username="simple_user", is_active=True) as user:
-        token = access_token_factory(user.id)
+    async with create_user_cm(session, username="simple_user") as user:
         yield MockUser(
             user=user,
-            auth_token=token,
+            auth_token=access_token_factory(user.id),
             role=UserTestRoles.Developer,
         )
 
@@ -48,7 +46,6 @@ async def simple_users(
             first_name=f"{username}_first",
             middle_name=f"{username}_middle",
             last_name=f"{username}_last",
-            is_active=True,
             is_superuser=False,
         )
         token = access_token_factory(user.id)
@@ -69,17 +66,6 @@ async def simple_users(
 
 
 @pytest_asyncio.fixture
-async def inactive_user(session: AsyncSession, access_token_factory) -> AsyncGenerator[MockUser, None]:
-    async with create_user_cm(session, username="inactive_user") as user:
-        access_token_factory(user.id)
-        yield MockUser(
-            user=user,
-            auth_token=access_token_factory(user.id),
-            role=UserTestRoles.Developer,
-        )
-
-
-@pytest_asyncio.fixture
 async def user_with_many_roles(
     session: AsyncSession,
     simple_user: MockUser,
@@ -88,7 +74,6 @@ async def user_with_many_roles(
     user = await create_user(
         session=session,
         username="multi_role_user",
-        is_active=True,
     )
 
     roles = [

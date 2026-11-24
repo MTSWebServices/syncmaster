@@ -36,7 +36,6 @@ if TYPE_CHECKING:
 async def create_user_cm(
     session: AsyncSession,
     username: str,
-    is_active: bool = False,
     is_superuser: bool = False,
     email: str | None = None,
     first_name: str | None = None,
@@ -53,7 +52,6 @@ async def create_user_cm(
         first_name=first_name,
         middle_name=middle_name,
         last_name=last_name,
-        is_active=is_active,
         is_superuser=is_superuser,
     )
     session.add(u)
@@ -67,7 +65,6 @@ async def create_user_cm(
 async def create_user(
     session: AsyncSession,
     username: str,
-    is_active: bool = False,
     is_superuser: bool = False,
     email: str | None = None,
     first_name: str | None = None,
@@ -84,7 +81,6 @@ async def create_user(
         first_name=first_name,
         middle_name=middle_name,
         last_name=last_name,
-        is_active=is_active,
         is_superuser=is_superuser,
     )
     session.add(u)

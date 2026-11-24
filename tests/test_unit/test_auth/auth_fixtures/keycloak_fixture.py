@@ -199,7 +199,6 @@ def mock_keycloak_introspect_token(settings, mock_keycloak_api):
             "given_name": user.first_name,
             "middle_name": user.middle_name,
             "family_name": user.last_name,
-            "active": user.is_active,
         }
         introspect_url = f"{realm_url}/protocol/openid-connect/token/introspect"
 

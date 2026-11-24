@@ -53,7 +53,6 @@ async def create_group_member(
     user = await create_user(
         session,
         username,
-        is_active=True,
     )
 
     session.add(
@@ -93,7 +92,6 @@ async def empty_group(session: AsyncSession, access_token_factory) -> AsyncGener
     owner = await create_user(
         session=session,
         username="empty_group_owner",
-        is_active=True,
     )
     group = await create_group(
         session=session,
@@ -120,7 +118,6 @@ async def group(session: AsyncSession, access_token_factory) -> AsyncGenerator[M
     owner = await create_user(
         session=session,
         username="notempty_group_owner",
-        is_active=True,
     )
     group = await create_group(session=session, name="notempty_group", owner_id=owner.id)
 
@@ -165,7 +162,6 @@ async def mock_group(
     group_owner = await create_user(
         session=session,
         username=f"{secrets.token_hex(5)}_group_connection_owner",
-        is_active=True,
     )
     group = await create_group(
         session=session,

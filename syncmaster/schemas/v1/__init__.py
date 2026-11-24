@@ -46,7 +46,6 @@ from syncmaster.schemas.v1.transfers.run import (
 )
 from syncmaster.schemas.v1.transfers.strategy import FullStrategy, IncrementalStrategy
 from syncmaster.schemas.v1.users import (
-    FullUserSchema,
     ReadGroupMember,
     ReadUserSchema,
     UserPageSchema,
@@ -70,7 +69,6 @@ __all__ = [
     "CreateTransferSchema",
     "Excel",
     "FullStrategy",
-    "FullUserSchema",
     "GroupPageSchema",
     "IncrementalStrategy",
     "JSONLine",

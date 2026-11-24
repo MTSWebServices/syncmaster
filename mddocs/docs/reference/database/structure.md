@@ -20,7 +20,6 @@ erDiagram
         varchar(256) last_name null
         varchar(256) middle_name null
         boolean is_superuser
-        boolean is_active
         timestamp created_at
         timestamp updated_at
     }

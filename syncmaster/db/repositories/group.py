@@ -253,7 +253,6 @@ class GroupRepository(Repository[Group]):
                 UserGroup.user_id == User.id,
             )
             .where(
-                User.is_active.is_(True),
                 UserGroup.group_id == group.id,
             )
             .order_by(User.username)

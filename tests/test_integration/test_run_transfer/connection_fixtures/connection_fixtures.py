@@ -19,7 +19,6 @@ async def group_owner(
     user = await create_user(
         session=session,
         username=secrets.token_hex(5),
-        is_active=True,
     )
 
     token = access_token_factory(user.id)

@@ -25,9 +25,6 @@ class UserRepository(Repository[User]):
         if search_query:
             stmt = stmt.where(User.username.bool_op("%")(search_query))  # similarity_threshold defaults to 0.3
 
-        if not is_superuser:
-            stmt = stmt.where(User.is_active.is_(True))
-
         return await self._paginate_scalar_result(query=stmt.order_by(User.username), page=page, page_size=page_size)
 
     async def read_by_id(self, user_id: int, **kwargs: Any) -> User:

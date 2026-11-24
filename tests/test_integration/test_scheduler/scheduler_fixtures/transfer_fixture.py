@@ -35,7 +35,6 @@ async def group_transfer_integration_mock(
     group_owner = await create_user(
         session=session,
         username="group_transfer_owner",
-        is_active=True,
     )
     group = await create_group(
         session=session,

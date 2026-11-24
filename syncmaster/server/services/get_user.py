@@ -59,9 +59,6 @@ def get_user(
         if user is None:
             msg = "User not found"
             raise EntityNotFoundError(msg)
-        if not user.is_active:
-            msg = "Inactive user"
-            raise ActionNotAllowedError(msg)
         if is_superuser and not user.is_superuser:
             msg = "You have no power here"
             raise ActionNotAllowedError(msg)

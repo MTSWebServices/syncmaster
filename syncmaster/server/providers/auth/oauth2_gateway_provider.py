@@ -56,10 +56,6 @@ class OAuth2GatewayProvider(AuthProvider):
             msg = "Invalid token payload"
             raise AuthorizationError(msg) from e
 
-        if token_info["active"] is False:
-            msg = "Token is not active"
-            raise AuthorizationError(msg)
-
         # these names are hardcoded in keycloak:
         # https://github.com/keycloak/keycloak/blob/3ca3a4ad349b4d457f6829eaf2ae05f1e01408be/core/src/main/java/org/keycloak/representations/IDToken.java
         # TODO: make sure which fields are guaranteed

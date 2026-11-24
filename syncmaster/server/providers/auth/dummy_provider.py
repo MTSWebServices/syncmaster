@@ -63,9 +63,6 @@ class DummyAuthProvider(AuthProvider):
                 user = await uow.user.create(username=login)
 
         log.info("User with id %r found", user.id)
-        if not user.is_active:
-            msg = f"User {user.username!r} is disabled"
-            raise AuthorizationError(msg)
 
         log.info("Generate access token for user id %r", user.id)
         access_token, expires_at = self._generate_access_token(user_id=user.id)

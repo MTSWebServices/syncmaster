@@ -51,21 +51,6 @@ async def test_get_users_authorized(client: AsyncClient, simple_user: MockUser):
             }
 
 
-async def test_get_users_inactive(client: AsyncClient, inactive_user: MockUser):
-    headers = {"Authorization": f"Bearer {inactive_user.token}"}
-
-    response = await client.get("v1/users", headers=headers)
-
-    assert response.status_code == 403, response.text
-    assert response.json() == {
-        "error": {
-            "code": "forbidden",
-            "message": "You have no power here",
-            "details": None,
-        },
-    }
-
-
 @pytest.mark.parametrize(
     "search_value_extractor",
     [

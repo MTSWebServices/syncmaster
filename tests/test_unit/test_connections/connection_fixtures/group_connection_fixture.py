@@ -34,7 +34,6 @@ async def group_connection(
     group_owner = await create_user(
         session=session,
         username=f"{secrets.token_hex(5)}_group_connection_owner",
-        is_active=True,
     )
     group = await create_group(
         session=session,
