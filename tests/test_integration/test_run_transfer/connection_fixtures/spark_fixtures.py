@@ -54,7 +54,7 @@ def spark(  # noqa: C901
         maven_packages.extend(Oracle.get_packages())
 
     if "clickhouse" in markers:
-        maven_packages.append("io.github.mtsongithub.doetl:spark-dialect-extension_2.12:0.0.4")
+        maven_packages.append("io.github.mtsongithub.doetl:spark-dialect-extension_2.12:0.0.5")
         maven_packages.extend(Clickhouse.get_packages())
 
     if "mssql" in markers:
