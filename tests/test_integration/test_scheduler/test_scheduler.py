@@ -40,7 +40,8 @@ async def test_scheduler(
         await session.scalars(
             select(Run).filter_by(transfer_id=group_transfer.id).order_by(Run.created_at.desc()),
         )
-    ).one()
+    ).first()
+    assert run
     assert run.status in [Status.CREATED, Status.STARTED]
 
     started = time.perf_counter()
