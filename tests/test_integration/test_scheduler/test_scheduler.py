@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 import pytest
 from pytest_mock import MockType
@@ -35,16 +36,17 @@ async def test_scheduler(
 
     await asyncio.sleep(1.5)  # make sure that created job with every-second cron worked
 
-    run = await session.scalar(
-        select(Run).filter_by(transfer_id=group_transfer.id).order_by(Run.created_at.desc()),
-    )
-    assert run is not None
+    run = (
+        await session.scalars(
+            select(Run).filter_by(transfer_id=group_transfer.id).order_by(Run.created_at.desc()),
+        )
+    ).one()
     assert run.status in [Status.CREATED, Status.STARTED]
 
-    for _ in range(3):
-        await asyncio.sleep(2)
+    started = time.perf_counter()
+    while (time.perf_counter() - started) < 10:
+        await asyncio.sleep(0.1)
         await session.refresh(run)
-        run = await session.scalar(select(Run, run.id))
         if run.status == Status.FINISHED:
             break
 
