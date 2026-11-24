@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: syncmaster
       POSTGRES_PASSWORD: changeme
     ports:
-      - 5432:5432
+      - 127.0.0.1:5432:5432
     volumes:
       - postgres_test_data:/var/lib/postgresql/data
     healthcheck:
@@ -23,7 +23,7 @@ services:
     image: rabbitmq:4.2
     restart: unless-stopped
     ports:
-      - 5672:5672
+      - 127.0.0.1:5672:5672
     volumes:
       - rabbitmq_test_data:/var/lib/rabbitmq
     healthcheck:
@@ -59,7 +59,7 @@ services:
       context: .
       target: test
     ports:
-      - 8000:8000
+      - 127.0.0.1:8000:8000
     volumes:
       - ./config.docker.yml:/app/config.yml
       - ./syncmaster:/app/syncmaster
@@ -143,7 +143,7 @@ services:
     tmpfs:
       - /tmp/prometheus-metrics:mode=1777
     ports:
-      - 8020:8000
+      - 127.0.0.1:8020:8000
     depends_on:
       horizon-db:
         condition: service_healthy
@@ -158,7 +158,7 @@ services:
       POSTGRES_USER: horizon
       POSTGRES_PASSWORD: changeme
     ports:
-      - 5434:5432
+      - 127.0.0.1:5434:5432
     volumes:
       - horizon_test_data:/var/lib/postgresql/data
     healthcheck:
@@ -173,7 +173,7 @@ services:
     image: postgres:17
     restart: unless-stopped
     ports:
-      - 5433:5432
+      - 127.0.0.1:5433:5432
     environment:
       TZ: UTC
       POSTGRES_DB: syncmaster
@@ -196,8 +196,8 @@ services:
       MINIO_ROOT_USER: syncmaster
       MINIO_ROOT_PASSWORD: 123UsedForTestOnly@!
     ports:
-      - 9010:9000
-      - 9011:9001
+      - 127.0.0.1:9010:9000
+      - 127.0.0.1:9011:9001
     healthcheck:
       test: curl -f http://localhost:9000/minio/health/live
       start_period: 5s
@@ -219,7 +219,7 @@ services:
       AWS_SECRET_ACCESS_KEY: 123UsedForTestOnly@!
       AWS_REGION: us-east-1
     ports:
-      - 8181:8181
+      - 127.0.0.1:8181:8181
     depends_on:
       test-s3:
         condition: service_healthy
@@ -229,7 +229,7 @@ services:
     image: gvenzl/oracle-xe:slim-faststart
     restart: unless-stopped
     ports:
-      - 1522:1521
+      - 127.0.0.1:1522:1521
     environment:
       TZ: UTC
       ORACLE_PASSWORD: 123AdminUserForTests@!
@@ -247,8 +247,8 @@ services:
       CLICKHOUSE_PASSWORD: 123UsedForTestOnly@!
       CLICKHOUSE_DB: syncmaster
     ports:
-      - 8123:8123
-      - 9001:9000
+      - 127.0.0.1:8123:8123
+      - 127.0.0.1:9001:9000
     profiles: [clickhouse, all]
 
   test-mssql:
@@ -259,7 +259,7 @@ services:
       ACCEPT_EULA: Y
       MSSQL_SA_PASSWORD: 123AdminUserForTests@!@!
     ports:
-      - 1433:1433
+      - 127.0.0.1:1433:1433
     volumes:
       - ./docker/mssql/:/usr/config/
     entrypoint: [/usr/config/entrypoint.sh]
@@ -276,7 +276,7 @@ services:
       MYSQL_USER: syncmaster
       MYSQL_PASSWORD: 123UsedForTestOnly@!
     ports:
-      - 3306:3306
+      - 127.0.0.1:3306:3306
     platform: linux/amd64
     profiles: [mysql, all]
 
@@ -289,7 +289,7 @@ services:
       POSTGRES_USER: test_hive
       POSTGRES_PASSWORD: test_hive
     ports:
-      - 5440:5432
+      - 127.0.0.1:5440:5432
     healthcheck:
       test: [CMD-SHELL, 'pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}']
       start_period: 5s
@@ -307,7 +307,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - 8080:8080
+      - 127.0.0.1:8080:8080
     volumes:
       - keycloak_data:/opt/keycloak/data
     profiles: [keycloak, all]
@@ -320,15 +320,15 @@ services:
       metastore-hive:
         condition: service_healthy
     ports:
-      - 9820:9820 # HDFS IPC
-      - 9870:9870 # HDFS WebHDFS
-      - 8088:8088 # Yarn UI
-      - 8042:8042 # NodeManager UI
-      - 10000:10000 # Hive server
-      - 10002:10002 # Hive server Admin UI
-      - 19888:19888 # MapReduce JobServer History UI
-      - 9083:9083 # Hive Metastore server
-      - 9864:9864 # Datanode UI
+      - 127.0.0.1:9820:9820 # HDFS IPC
+      - 127.0.0.1:9870:9870 # HDFS WebHDFS
+      - 127.0.0.1:8088:8088 # Yarn UI
+      - 127.0.0.1:8042:8042 # NodeManager UI
+      - 127.0.0.1:10000:10000 # Hive server
+      - 127.0.0.1:10002:10002 # Hive server Admin UI
+      - 127.0.0.1:19888:19888 # MapReduce JobServer History UI
+      - 127.0.0.1:9083:9083 # Hive Metastore server
+      - 127.0.0.1:9864:9864 # Datanode UI
     environment:
       TZ: UTC
       WITH_HIVE_SERVER: 'false' # We leave only the metastore server, we don’t need Hive itself, we don’t waste resources on it
@@ -343,7 +343,7 @@ services:
     image: ${SFTP_IMAGE:-linuxserver/openssh-server}
     restart: unless-stopped
     ports:
-      - 2222:2222
+      - 127.0.0.1:2222:2222
     environment:
       TZ: UTC
       PUID: 1000
@@ -367,8 +367,8 @@ services:
       APP_UID: 1000
       APP_GID: 1000
     ports:
-      - 2121:21
-      - 30000-30010:30000-30010
+      - 127.0.0.1:2121:21
+      - 127.0.0.1:30000-30010:30000-30010
     volumes:
       - ./docker/ftp/on_post_init.sh:/sources/ftp/eventscripts/on_post_init.sh
     profiles: [ftp, all]
@@ -386,8 +386,8 @@ services:
       APP_UID: 1000
       APP_GID: 1000
     ports:
-      - 2122:21
-      - 30020-30030:30020-30030
+      - 127.0.0.1:2122:21
+      - 127.0.0.1:30020-30030:30020-30030
     volumes:
       - ./docker/ftp/on_post_init.sh:/sources/ftps/eventscripts/on_post_init.sh
     profiles: [ftps, all]
@@ -396,8 +396,8 @@ services:
     image: ${SAMBA_IMAGE:-elswork/samba}
     restart: unless-stopped
     ports:
-      - 139:139
-      - 1445:445
+      - 127.0.0.1:139:139
+      - 127.0.0.1:1445:445
     environment:
       TZ: UTC
     volumes:
@@ -415,7 +415,7 @@ services:
       APP_UID: 1000
       APP_GID: 1000
     ports:
-      - 8010:80
+      - 127.0.0.1:8010:80
     volumes:
       # Remove after https://github.com/chonjay21/docker-webdav/pull/3
       - ./docker/webdav/on_post_init.sh:/sources/webdav/eventscripts/on_post_init.sh
