@@ -85,8 +85,8 @@ def spark(  # noqa: C901
     if "iceberg" in markers:
         maven_packages.extend(
             [
-                *Iceberg.get_packages(package_version="1.10.0", spark_version="3.5"),
-                *Iceberg.S3Warehouse.get_packages(package_version="1.10.0"),
+                *Iceberg.get_packages(package_version="1.11.0", spark_version="3.5"),
+                *Iceberg.S3Warehouse.get_packages(package_version="1.11.0"),
             ],
         )
 

@@ -48,8 +48,8 @@ def get_packages(connection_types: set[str]) -> list[str]:
     if connection_types & {"iceberg", "all"}:
         result.extend(
             [
-                *Iceberg.get_packages(package_version="1.10.0", spark_version=spark_version),
-                *Iceberg.S3Warehouse.get_packages(package_version="1.10.0"),
+                *Iceberg.get_packages(package_version="1.11.0", spark_version=spark_version),
+                *Iceberg.S3Warehouse.get_packages(package_version="1.11.0"),
             ],
         )
 
