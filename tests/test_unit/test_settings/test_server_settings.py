@@ -51,7 +51,7 @@ def test_server_settings_are_loaded_from_default_yaml_file(
     assert str(settings.broker.url) == "amqp://user:password@localhost:5672/"
     assert settings.encryption.secret_key == "secret_key"
     assert settings.server.debug is True
-    assert settings.server.cors.dict() == {
+    assert settings.server.cors.model_dump() == {
         "enabled": True,
         "allow_origins": ["*"],
         "allow_credentials": True,

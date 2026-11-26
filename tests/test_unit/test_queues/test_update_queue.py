@@ -35,11 +35,10 @@ async def test_maintainer_plus_can_update_queue(
     }
     assert response.status_code == 200, response.text
 
-    queue = await session.get(Queue, group_queue.id)
-    await session.refresh(queue)
-    assert queue.name == r"New queue!\"#$%&'()*+,-./:;<=>?@\[\\\]^_`{|}~"
-    assert queue.description == "New description"
-    assert queue.slug == group_queue.slug
+    await session.refresh(group_queue)
+    assert group_queue.name == r"New queue!\"#$%&'()*+,-./:;<=>?@\[\\\]^_`{|}~"
+    assert group_queue.description == "New description"
+    assert group_queue.slug == group_queue.slug
 
 
 async def test_superuser_can_update_queue(
@@ -66,11 +65,10 @@ async def test_superuser_can_update_queue(
         "slug": group_queue.slug,
     }
 
-    queue = await session.get(Queue, group_queue.id)
-    await session.refresh(queue)
-    assert queue.name == "New queue"
-    assert queue.description == "New description"
-    assert queue.slug == group_queue.slug
+    await session.refresh(group_queue)
+    assert group_queue.name == "New queue"
+    assert group_queue.description == "New description"
+    assert group_queue.slug == group_queue.slug
 
 
 async def test_groupless_user_cannot_update_queue(

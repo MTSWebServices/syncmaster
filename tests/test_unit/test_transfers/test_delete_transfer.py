@@ -16,6 +16,7 @@ async def test_maintainer_plus_can_delete_group_transfer(
 ):
     user = group_transfer.owner_group.get_member_of_role(role_maintainer_plus)
     transfer = await session.get(Transfer, group_transfer.id)
+    assert transfer
 
     response = await client.delete(
         f"v1/transfers/{group_transfer.id}",
@@ -25,7 +26,7 @@ async def test_maintainer_plus_can_delete_group_transfer(
     assert response.status_code == 204, response.text
     session.expunge(transfer)
     transfer_in_db = await session.get(Transfer, transfer.id)
-    assert transfer_in_db is None
+    assert not transfer_in_db
 
 
 async def test_superuser_can_delete_transfer(
@@ -35,6 +36,7 @@ async def test_superuser_can_delete_transfer(
     session: AsyncSession,
 ):
     transfer = await session.get(Transfer, group_transfer.id)
+    assert transfer
 
     response = await client.delete(
         f"v1/transfers/{group_transfer.id}",
@@ -44,7 +46,7 @@ async def test_superuser_can_delete_transfer(
     assert response.status_code == 204, response.text
     session.expunge(transfer)
     transfer_in_db = await session.get(Transfer, transfer.id)
-    assert transfer_in_db is None
+    assert not transfer_in_db
 
 
 async def test_groupless_user_cannot_delete_transfer(
@@ -73,8 +75,9 @@ async def test_developer_or_below_cannot_delete_transfer(
     session: AsyncSession,
     role_developer_or_below: UserTestRoles,
 ):
-    transfer = await session.get(Transfer, group_transfer.id)
     user = group_transfer.owner_group.get_member_of_role(role_developer_or_below)
+    transfer = await session.get(Transfer, group_transfer.id)
+    assert transfer
 
     response = await client.delete(
         f"v1/transfers/{group_transfer.id}",
@@ -91,7 +94,7 @@ async def test_developer_or_below_cannot_delete_transfer(
     }
     session.expunge(transfer)
     transfer_in_db = await session.get(Transfer, transfer.id)
-    assert transfer_in_db is not None
+    assert transfer_in_db
 
 
 async def test_group_member_cannot_delete_other_group_transfer(
@@ -137,8 +140,6 @@ async def test_unauthorized_user_cannot_delete_transfer(
 
 async def test_superuser_cannot_delete_unknown_transfer_error(
     client: AsyncClient,
-    group_transfer: MockTransfer,
-    session: AsyncSession,
     superuser: MockUser,
 ):
     response = await client.delete(
@@ -160,7 +161,6 @@ async def test_maintainer_plus_cannot_delete_unknown_transfer_error(
     client: AsyncClient,
     group_transfer: MockTransfer,
     role_maintainer_plus: UserTestRoles,
-    session: AsyncSession,
 ):
     user = group_transfer.owner_group.get_member_of_role(role_maintainer_plus)
 

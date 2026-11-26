@@ -32,8 +32,7 @@ services:
         condition: service_healthy
 
   rabbitmq:
-    # not using 4.3 until https://github.com/celery/kombu/issues/2237
-    image: rabbitmq:4.2
+    image: rabbitmq:4
     restart: unless-stopped
     ports:
       - 127.0.0.1:5672:5672
