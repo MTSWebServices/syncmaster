@@ -19,10 +19,10 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column("celery_taskmeta", sa.Column("children", sa.LargeBinary(), nullable=True))
-    op.add_column("celery_taskmeta", sa.Column("stamps", sa.LargeBinary(), nullable=True))
+    op.add_column("celery_taskmeta", sa.Column("children", sa.LargeBinary(), nullable=True), if_not_exists=True)
+    op.add_column("celery_taskmeta", sa.Column("stamps", sa.LargeBinary(), nullable=True), if_not_exists=True)
 
 
 def downgrade() -> None:
-    op.drop_column("celery_taskmeta", "stamps")
-    op.drop_column("celery_taskmeta", "children")
+    op.drop_column("celery_taskmeta", "stamps", if_exists=True)
+    op.drop_column("celery_taskmeta", "children", if_exists=True)
